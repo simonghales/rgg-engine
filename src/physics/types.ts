@@ -1,0 +1,30 @@
+import {MutableRefObject} from "react";
+import {Object3D} from "three";
+
+export type OnWorldStepFn = (delta: number) => void
+
+export enum WorkerMessageType {
+    PHYSICS_UPDATE,
+    PHYSICS_PROCESSED,
+    PHYSICS_READY,
+    PHYSICS_ACKNOWLEDGED,
+}
+
+export type WorkerMessageData = {
+    type: WorkerMessageType,
+    data?: any,
+    [key: string]: any,
+}
+
+export type BodyData = {
+    ref: MutableRefObject<Object3D>,
+    index: number,
+    position: [number, number],
+    angle: number,
+    previous: {
+        position: [number, number],
+        angle: number,
+    },
+    lastUpdate: number,
+    lastRender: number,
+}
