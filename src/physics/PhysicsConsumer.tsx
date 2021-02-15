@@ -6,6 +6,7 @@ import {Object3D} from "three";
 import {DEFAULT_STEP_RATE} from "./config";
 import {lerp} from "../utils/numbers";
 import { Context } from "./PhysicsConsumer.context";
+import {PhysicsConsumerSyncMeshes} from "../index";
 
 const getPositionAndAngle = (
     buffers: Buffers,
@@ -61,7 +62,7 @@ const PhysicsConsumer: React.FC<{
 
         const now = getNow()
 
-        const nextExpectedUpdate = lastUpdate + stepRate + 2
+        const nextExpectedUpdate = lastUpdate + stepRate
 
         const min = lastUpdate
         const max = nextExpectedUpdate
@@ -197,11 +198,17 @@ const PhysicsConsumer: React.FC<{
         }
     }), [])
 
+    const syncMeshes = useCallback(() => {
+        Object.values(onFrameCallbacks.current).forEach(callback => callback())
+    }, [])
+
     return (
         <Context.Provider value={{
             subscribeToOnPhysicsUpdate,
             syncBody,
+            syncMeshes,
         }}>
+            <PhysicsConsumerSyncMeshes useRAF/>
             {children}
         </Context.Provider>
     );

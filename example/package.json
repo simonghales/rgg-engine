@@ -8,6 +8,7 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
+    "@react-three/drei": "^3.7.0",
     "planck-js": "^0.3.26",
     "react-app-polyfill": "^1.0.0"
   },

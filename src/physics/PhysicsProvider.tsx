@@ -45,14 +45,8 @@ const PhysicsProvider: React.FC<{
     stepRate: number,
 }> = ({children, onWorldStep, stepRate}) => {
 
-    const [paused, setPaused] = useState(false)
+    const paused = false
     usePhysicsWorldStepHandler(onWorldStep, stepRate, paused)
-
-    useEffect(() => {
-        setInterval(() => {
-            setPaused(state => !state)
-        }, 1000)
-    }, [])
 
     return (
         <Context.Provider value={{}}>

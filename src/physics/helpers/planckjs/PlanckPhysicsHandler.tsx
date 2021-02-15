@@ -9,6 +9,9 @@ import WorkerSubscription from "./WorkerSubscription";
 
 const usePlanckBodies = () => {
 
+    const [bodies] = useState<{
+        [key: string]: Body,
+    }>({})
     const [syncedBodies] = useState<{
         [key: string]: Body,
     }>({})
@@ -38,12 +41,28 @@ const usePlanckBodies = () => {
         hasPendingSyncedBodiesRef.current += 1
     }, [])
 
+    const addBody = useCallback((uid: string, body: Body, synced: boolean = false) => {
+        bodies[uid] = body
+        let syncedUnsub: any
+        if (synced) {
+            syncedUnsub = addSyncedBody(uid, body)
+        }
+        return () => {
+            delete bodies[uid]
+            if (syncedUnsub) {
+                syncedUnsub()
+            }
+        }
+    }, [])
+
     return {
         addSyncedBody,
         removeSyncedBody,
         getPendingSyncedBodiesIteration,
         syncedBodiesOrder,
         syncedBodies,
+        addBody,
+        bodies,
     }
 
 }
@@ -88,6 +107,8 @@ const usePlanckPhysics = (world: World, stepRate: number) => {
         getPendingSyncedBodiesIteration,
         syncedBodies,
         syncedBodiesOrder,
+        addBody,
+        bodies,
     } = usePlanckBodies()
 
     const {
@@ -113,6 +134,8 @@ const usePlanckPhysics = (world: World, stepRate: number) => {
         syncedBodiesOrder,
         addSyncedBody,
         removeSyncedBody,
+        addBody,
+        bodies,
     }
 }
 
@@ -130,7 +153,9 @@ const PlanckPhysicsHandler: React.FC<{
         syncedBodies,
         syncedBodiesOrder,
         addSyncedBody,
-        removeSyncedBody
+        removeSyncedBody,
+        addBody,
+        bodies,
     } = usePlanckPhysics(world, stepRate)
 
     return (
@@ -145,6 +170,8 @@ const PlanckPhysicsHandler: React.FC<{
                 world,
                 addSyncedBody,
                 removeSyncedBody,
+                addBody,
+                bodies,
             }}>
                 <Physics onWorldStep={onWorldStep} stepRate={stepRate}>
                     {children}

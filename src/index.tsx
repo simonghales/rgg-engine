@@ -3,6 +3,9 @@ import { createWorkerApp } from './createWorkerApp';
 import Physics from './physics/Physics';
 import PlanckApp from "./physics/helpers/planckjs/PlanckApp";
 import PhysicsConsumer from './physics/PhysicsConsumer';
+import PhysicsConsumerSyncMeshes from './physics/PhysicsConsumerSyncMeshes';
+import { usePhysicsConsumerContext } from './physics/PhysicsConsumer.context';
+import { usePlanckAppContext } from './physics/helpers/planckjs/PlanckApp.context';
 
 // Delete me
 export const Thing = () => {
@@ -15,4 +18,7 @@ export {
   Physics,
   PlanckApp,
   PhysicsConsumer,
+  PhysicsConsumerSyncMeshes,
+  usePhysicsConsumerContext,
+  usePlanckAppContext,
 }
