@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef} from "react";
 import {Context} from "./PhysicsProvider.context";
 import {OnWorldStepFn} from "./types";
 import {createNewPhysicsLoopWebWorker} from "./physicsLoopWorker";

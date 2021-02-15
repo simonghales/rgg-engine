@@ -44,7 +44,7 @@ const PhysicsConsumer: React.FC<{
         subscriptionsIterator: 0,
     })
     const onFixedUpdateSubscriptions = useRef<{
-        [key: string]: (delta: number) => void,
+        [key: string]: MutableRefObject<(delta: number) => void>,
     }>({})
     const onFrameCallbacks = useRef<{
         [id: string]: () => void,
@@ -113,7 +113,7 @@ const PhysicsConsumer: React.FC<{
         const now = getNow()
         const delta = (now - localStateRef.current.lastUpdate) / 1000
         localStateRef.current.lastUpdate = now
-        Object.values(onFixedUpdateSubscriptions.current).forEach(callback => callback(delta))
+        Object.values(onFixedUpdateSubscriptions.current).forEach(callback => callback.current(delta))
 
     }, [])
 
@@ -165,7 +165,7 @@ const PhysicsConsumer: React.FC<{
         subscribeToOnPhysicsUpdate,
         syncBody,
     } = useMemo(() => ({
-        subscribeToOnPhysicsUpdate: (callback: (delta: number) => void) => {
+        subscribeToOnPhysicsUpdate: (callback: MutableRefObject<(delta: number) => void>) => {
             const id = localStateRef.current.subscriptionsIterator.toString()
             localStateRef.current.subscriptionsIterator += 1
             onFixedUpdateSubscriptions.current[id] = callback
@@ -202,11 +202,16 @@ const PhysicsConsumer: React.FC<{
         Object.values(onFrameCallbacks.current).forEach(callback => callback())
     }, [])
 
+    const sendMessage = useCallback((message: any) => {
+        worker.postMessage(message)
+    }, [])
+
     return (
         <Context.Provider value={{
             subscribeToOnPhysicsUpdate,
             syncBody,
             syncMeshes,
+            sendMessage,
         }}>
             <PhysicsConsumerSyncMeshes useRAF/>
             {children}

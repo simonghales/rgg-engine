@@ -4,6 +4,7 @@ import {Context} from "./PlanckPhysicsHandler.context";
 import {Context as AppContext} from "./PlanckApp.context";
 import Physics from "../../Physics";
 import WorkerSubscription from "./WorkerSubscription";
+import PlanckPhysicsWorkerMessagesHandler from "./PlanckPhysicsWorkerMessagesHandler";
 
 
 
@@ -173,6 +174,7 @@ const PlanckPhysicsHandler: React.FC<{
                 addBody,
                 bodies,
             }}>
+                <PlanckPhysicsWorkerMessagesHandler world={world} worker={worker}/>
                 <Physics onWorldStep={onWorldStep} stepRate={stepRate}>
                     {children}
                 </Physics>

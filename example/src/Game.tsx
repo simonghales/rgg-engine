@@ -1,7 +1,8 @@
 import { Sphere } from "@react-three/drei"
 import React, {useEffect, useRef} from "react"
 import {Object3D} from "three";
-import {usePhysicsConsumerContext} from "../../src";
+import {FixtureShape, useBody, useBodyApi, useOnFixedUpdate, usePhysicsConsumerContext} from "../../src";
+import {Vec2} from "planck-js";
 
 const Game: React.FC = () => {
 
@@ -13,6 +14,31 @@ const Game: React.FC = () => {
     useEffect(() => {
         return syncBody('player', sphereRef)
     }, [])
+
+    useBody(() => ({
+        body: {
+            type: 'dynamic',
+            allowSleep: false,
+            fixedRotation: true,
+            position: Vec2(2, 2),
+            linearDamping: 40,
+        },
+        fixtures: [{
+            shape: FixtureShape.Circle,
+            args: [],
+            fixtureOptions: {
+                density: 10,
+            }
+        }],
+    }), {
+        id: 'player',
+    })
+
+    const api = useBodyApi('player')
+
+    useOnFixedUpdate(() => {
+        api('setLinearVelocity', [Vec2(-10, 0)])
+    })
 
     return (
         <Sphere ref={sphereRef}>

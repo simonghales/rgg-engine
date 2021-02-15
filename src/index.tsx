@@ -6,6 +6,8 @@ import PhysicsConsumer from './physics/PhysicsConsumer';
 import PhysicsConsumerSyncMeshes from './physics/PhysicsConsumerSyncMeshes';
 import { usePhysicsConsumerContext } from './physics/PhysicsConsumer.context';
 import { usePlanckAppContext } from './physics/helpers/planckjs/PlanckApp.context';
+import { useBody, useBodyApi, useOnFixedUpdate } from './physics/helpers/planckjs/hooks';
+import { FixtureShape } from './physics/helpers/planckjs/types';
 
 // Delete me
 export const Thing = () => {
@@ -21,4 +23,8 @@ export {
   PhysicsConsumerSyncMeshes,
   usePhysicsConsumerContext,
   usePlanckAppContext,
+  useBody,
+  useBodyApi,
+  useOnFixedUpdate,
+  FixtureShape,
 }

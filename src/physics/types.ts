@@ -8,6 +8,9 @@ export enum WorkerMessageType {
     PHYSICS_PROCESSED,
     PHYSICS_READY,
     PHYSICS_ACKNOWLEDGED,
+    ADD_BODY,
+    REMOVE_BODY,
+    MODIFY_BODY,
 }
 
 export type WorkerMessageData = {

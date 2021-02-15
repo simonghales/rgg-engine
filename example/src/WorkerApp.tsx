@@ -13,6 +13,8 @@ const Game: React.FC = () => {
 
     useEffect(() => {
 
+        return
+
         const bodyDef: BodyDef = {
             type: 'dynamic',
             allowSleep: false,
