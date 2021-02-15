@@ -1,10 +1,9 @@
 import {createContext, useContext} from "react";
-import {Body} from "planck-js";
 
 type State = {
     getPendingSyncedBodiesIteration: () => number,
     syncedBodies: {
-        [key: string]: Body,
+        [key: string]: any,
     }
     syncedBodiesOrder: string[],
     maxNumberOfSyncedBodies: number,

@@ -22,11 +22,11 @@ export type WorkerMessageData = {
 export type BodyData = {
     ref: MutableRefObject<Object3D>,
     index: number,
-    position: [number, number],
-    angle: number,
+    position: [number, number] | [number, number, number],
+    angle: number | [number, number, number, number],
     previous: {
-        position: [number, number],
-        angle: number,
+        position: [number, number] | [number, number, number],
+        angle: number | [number, number, number, number],
     },
     lastUpdate: number,
     lastRender: number,

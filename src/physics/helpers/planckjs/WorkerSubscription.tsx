@@ -1,38 +1,16 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import {Body} from "planck-js"
 import {usePlanckPhysicsHandlerContext} from "./PlanckPhysicsHandler.context";
-import {Buffers} from "./types";
-import {generateBuffers} from "./buffers";
 import {getNow} from "../../../utils/time";
 import {WorkerMessageData, WorkerMessageType} from "../../types";
-
-const applyBufferData = (
-    buffers: Buffers,
-    syncedBodies: {
-        [key: string]: Body,
-    }, syncedBodiesOrder: string[]) => {
-
-    const {
-        positions,
-        angles,
-    } = buffers
-
-    syncedBodiesOrder.forEach((id, index) => {
-        const body = syncedBodies[id]
-        if (!body) return;
-        const position = body.getPosition();
-        const angle = body.getAngle();
-        positions[2 * index + 0] = position.x;
-        positions[2 * index + 1] = position.y;
-        angles[index] = angle;
-    })
-
-}
+import {ApplyBufferDataFn} from "./updates";
+import {Buffers} from "./types";
 
 const WorkerSubscription: React.FC<{
     worker: Worker,
     subscribe: (callback: () => void) => () => void,
-}> = ({worker, subscribe}) => {
+    applyBufferData: ApplyBufferDataFn,
+    generateBuffers: (maxNumberOfSyncedBodies: number) => Buffers,
+}> = ({worker, subscribe, applyBufferData, generateBuffers}) => {
 
     const {
         getPendingSyncedBodiesIteration,

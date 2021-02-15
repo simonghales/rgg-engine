@@ -9,21 +9,41 @@ export const createNewPhysicsLoopWebWorker = (stepRate: number) => {
                 return start + performance.now();
             }
             
-            var lastUpdate = getNow();
+            var lastUpdate = -1;
             var accumulator = 0;
-            
-            while(true) {
+        
+            function step() {
+                if (lastUpdate < 0) {
+                    lastUpdate = getNow() - updateRate;
+                }
                 var now = getNow();
                 var delta = now - lastUpdate;
                 lastUpdate = now;
-                
+
                 accumulator += delta;
-                
+
                 if (accumulator > updateRate) {
-                    accumulator -= updateRate;
-                    self.postMessage('step')
+                    accumulator = 0;
+                    self.postMessage('step');
+                } else {
+                    var difference = updateRate - accumulator;
+                    if (difference < 3) {
+                        var start = getNow();
+                        var endTime = start + difference;
+                        var now = getNow(); 
+                        while (now < endTime) {    
+                            now = getNow();
+                        }
+                        accumulator = 0;
+                        self.postMessage('step');
+                    }
                 }
                 
+                setTimeout(step, updateRate - 3);
+                
             }
+            
+            step()
+            
         `) );
 }

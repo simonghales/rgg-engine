@@ -842,6 +842,11 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@dimforge/rapier3d@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@dimforge/rapier3d/-/rapier3d-0.3.1.tgz#2a2fc8895498e6142ea305317761204f32b985b6"
+  integrity sha512-ytNcx5j7PHt1BTvJSkowwMx6XTh8etCiU0Nf2ydyWKdXcL52FXZuhLF3/nF5cNW3FbM9XI8dQ//ac6lxsb6/NQ==
+
 "@iarna/toml@^2.2.0":
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.5.tgz#b32366c89b43c6f8cefbdefac778b9c828e3ba8c"
@@ -1468,6 +1473,11 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001181:
   version "1.0.30001187"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001187.tgz#5706942631f83baa5a0218b7dfa6ced29f845438"
   integrity sha512-w7/EP1JRZ9552CyrThUnay2RkZ1DXxKe/Q2swTC4+LElLh9RRYrL1Z+27LlakB8kzY0fSmHw9mc7XYDUKAKWMA==
+
+cannon-es@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/cannon-es/-/cannon-es-0.16.0.tgz#de9064970e65fe65a271ddb43a98d097edf25389"
+  integrity sha512-hSK5Y0B7dlXMV1SwSIID1lcNoZYvIbHzhLMlBLqe6oLSo0jdR07H/rsKDBmlyayWGjX4lZXV9iZb+AzomzCjXA==
 
 caseless@~0.12.0:
   version "0.12.0"

@@ -8,7 +8,9 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
+    "@dimforge/rapier3d": "^0.3.1",
     "@react-three/drei": "^3.7.0",
+    "cannon-es": "^0.16.0",
     "planck-js": "^0.3.26",
     "react-app-polyfill": "^1.0.0"
   },

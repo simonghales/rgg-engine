@@ -8,7 +8,7 @@ const usePlanckPhysics = () => {
     const [world, setWorld] = useState<World | null>(null)
 
     useEffect(() => {
-        const planckWorld = new World()
+        const planckWorld = new World({allowSleep: false})
         setWorld(planckWorld)
     }, [])
 

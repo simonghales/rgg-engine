@@ -3,6 +3,7 @@ import React, {useEffect, useRef} from "react"
 import {Object3D} from "three";
 import {FixtureShape, useBody, useBodyApi, useOnFixedUpdate, usePhysicsConsumerContext} from "../../src";
 import {Vec2} from "planck-js";
+import { Vec3 } from "cannon-es";
 
 const Game: React.FC = () => {
 
@@ -15,20 +16,33 @@ const Game: React.FC = () => {
         return syncBody('player', sphereRef)
     }, [])
 
+    // useBody(() => ({
+    //     body: {
+    //         type: 'dynamic',
+    //         allowSleep: false,
+    //         fixedRotation: true,
+    //         position: Vec2(2, 2),
+    //         linearDamping: 40,
+    //     },
+    //     fixtures: [{
+    //         shape: FixtureShape.Circle,
+    //         args: [],
+    //         fixtureOptions: {
+    //             density: 10,
+    //         }
+    //     }],
+    // }), {
+    //     id: 'player',
+    // })
+
     useBody(() => ({
         body: {
-            type: 'dynamic',
-            allowSleep: false,
-            fixedRotation: true,
-            position: Vec2(2, 2),
-            linearDamping: 40,
+            mass: 1,
+            position: new Vec3(0, 5, -5)
         },
-        fixtures: [{
-            shape: FixtureShape.Circle,
-            args: [],
-            fixtureOptions: {
-                density: 10,
-            }
+        shapes: [{
+            type: 'Sphere',
+            args: [1],
         }],
     }), {
         id: 'player',
@@ -36,8 +50,8 @@ const Game: React.FC = () => {
 
     const api = useBodyApi('player')
 
-    useOnFixedUpdate(() => {
-        api('setLinearVelocity', [Vec2(-10, 0)])
+    useOnFixedUpdate((delta) => {
+        // api('applyForce', [new Vec3(-0.25, -0.25, 0.25)])
     })
 
     return (

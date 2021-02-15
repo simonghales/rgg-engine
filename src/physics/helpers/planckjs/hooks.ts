@@ -3,6 +3,7 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import {generateUUID} from "../../../utils/ids";
 import {usePhysicsConsumerContext} from "../../PhysicsConsumer.context";
 import {WorkerMessageType} from "../../types";
+import {AddBodyDef as CannonAddBodyDef} from "../cannon/types";
 
 export const useOnFixedUpdate = (callback: (delta: number) => void) => {
     const {
@@ -43,7 +44,7 @@ type Options = {
     synced: boolean,
 }
 
-export const useBody = (propsFn: () => AddBodyDef, options: Partial<Options> = {}) => {
+export const useBody = (propsFn: () => AddBodyDef | CannonAddBodyDef, options: Partial<Options> = {}) => {
 
     const {sendMessage} = usePhysicsConsumerContext()
     const [id] = useState(() => options.id ?? generateUUID())

@@ -1,7 +1,8 @@
 import React, {useEffect} from "react";
 import PlanckApp from "../../src/physics/helpers/planckjs/PlanckApp";
-import {usePlanckAppContext} from "../../src";
+import {CannonApp, usePlanckAppContext} from "../../src";
 import {BodyDef, Circle, Shape, Vec2} from "planck-js";
+import {STEP_RATE} from "./config";
 
 const Game: React.FC = () => {
 
@@ -43,9 +44,11 @@ const WorkerApp: React.FC<{
     worker: Worker
 }> = ({worker}) => {
     return (
-        <PlanckApp worker={worker} stepRate={1000 / 30}>
-            <Game/>
-        </PlanckApp>
+        // <PlanckApp worker={worker} stepRate={STEP_RATE}>
+            <CannonApp worker={worker} stepRate={STEP_RATE}>
+                {/*<Game/>*/}
+            </CannonApp>
+        // </PlanckApp>
     )
 };
 

@@ -1,21 +1,25 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {PhysicsConsumer} from "../../src";
-import Game from "./Game";
 import {Canvas} from "react-three-fiber";
+import {CannonPhysicsConsumer} from "../../src";
+import Game from "./Game";
+import "./index.css"
+import {STEP_RATE} from "./config";
 
 const worker = new Worker("../src/webWorker.ts")
 
+// import('@dimforge/rapier3d').then((RAPIER) => {
+//     console.log('loaded rapier physics...', RAPIER)
+// })
+
 const App = () => {
   return (
-    <div>
-        <Canvas>
-            <PhysicsConsumer worker={worker} stepRate={1000 / 30}>
-                <Game/>
-            </PhysicsConsumer>
-        </Canvas>
-    </div>
+    <Canvas>
+        <CannonPhysicsConsumer worker={worker} stepRate={STEP_RATE}>
+            <Game/>
+        </CannonPhysicsConsumer>
+    </Canvas>
   );
 };
 

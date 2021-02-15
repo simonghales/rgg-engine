@@ -1,20 +1,22 @@
 import React, {useCallback, useMemo, useRef, useState} from "react";
-import {World, Body} from "planck-js";
+import {World} from "planck-js";
 import {Context} from "./PlanckPhysicsHandler.context";
 import {Context as AppContext} from "./PlanckApp.context";
 import Physics from "../../Physics";
 import WorkerSubscription from "./WorkerSubscription";
 import PlanckPhysicsWorkerMessagesHandler from "./PlanckPhysicsWorkerMessagesHandler";
+import {applyBufferData} from "./updates";
+import {generateBuffers} from "./buffers";
 
 
 
-const usePlanckBodies = () => {
+export const usePhysicsBodies = () => {
 
     const [bodies] = useState<{
-        [key: string]: Body,
+        [key: string]: any,
     }>({})
     const [syncedBodies] = useState<{
-        [key: string]: Body,
+        [key: string]: any,
     }>({})
     const [syncedBodiesOrder] = useState<string[]>([])
     const hasPendingSyncedBodiesRef = useRef(0)
@@ -23,7 +25,7 @@ const usePlanckBodies = () => {
         return hasPendingSyncedBodiesRef.current
     }, [])
 
-    const addSyncedBody = useCallback((uid: string, body: Body) => {
+    const addSyncedBody = useCallback((uid: string, body: any) => {
         syncedBodiesOrder.push(uid)
         syncedBodies[uid] = body
         hasPendingSyncedBodiesRef.current += 1
@@ -42,7 +44,7 @@ const usePlanckBodies = () => {
         hasPendingSyncedBodiesRef.current += 1
     }, [])
 
-    const addBody = useCallback((uid: string, body: Body, synced: boolean = false) => {
+    const addBody = useCallback((uid: string, body: any, synced: boolean = false) => {
         bodies[uid] = body
         let syncedUnsub: any
         if (synced) {
@@ -68,7 +70,7 @@ const usePlanckBodies = () => {
 
 }
 
-const usePhysicsUpdate = () => {
+export const usePhysicsUpdate = () => {
 
     const countRef = useRef(0)
 
@@ -100,7 +102,7 @@ const usePhysicsUpdate = () => {
 
 }
 
-const usePlanckPhysics = (world: World, stepRate: number) => {
+export const usePhysics = () => {
 
     const {
         addSyncedBody,
@@ -110,25 +112,14 @@ const usePlanckPhysics = (world: World, stepRate: number) => {
         syncedBodiesOrder,
         addBody,
         bodies,
-    } = usePlanckBodies()
+    } = usePhysicsBodies()
 
     const {
         onUpdate,
         subscribeToPhysicsUpdates,
     } = usePhysicsUpdate()
 
-    const {
-        onWorldStep
-    } = useMemo(() => ({
-        onWorldStep: () => {
-            world.step(stepRate / 1000)
-            world.clearForces()
-            onUpdate()
-        }
-    }), [])
-
     return {
-        onWorldStep,
         subscribeToPhysicsUpdates,
         getPendingSyncedBodiesIteration,
         syncedBodies,
@@ -137,6 +128,7 @@ const usePlanckPhysics = (world: World, stepRate: number) => {
         removeSyncedBody,
         addBody,
         bodies,
+        onUpdate,
     }
 }
 
@@ -148,7 +140,6 @@ const PlanckPhysicsHandler: React.FC<{
 }> = ({children, world, worker, stepRate, maxNumberOfSyncedBodies}) => {
 
     const {
-        onWorldStep,
         subscribeToPhysicsUpdates,
         getPendingSyncedBodiesIteration,
         syncedBodies,
@@ -157,7 +148,18 @@ const PlanckPhysicsHandler: React.FC<{
         removeSyncedBody,
         addBody,
         bodies,
-    } = usePlanckPhysics(world, stepRate)
+        onUpdate,
+    } = usePhysics()
+
+    const {
+        onWorldStep
+    } = useMemo(() => ({
+        onWorldStep: () => {
+            world.step(stepRate / 1000)
+            world.clearForces()
+            onUpdate()
+        }
+    }), [])
 
     return (
         <Context.Provider value={{
@@ -166,7 +168,8 @@ const PlanckPhysicsHandler: React.FC<{
             syncedBodiesOrder,
             maxNumberOfSyncedBodies,
         }}>
-            <WorkerSubscription worker={worker} subscribe={subscribeToPhysicsUpdates}/>
+            <WorkerSubscription applyBufferData={applyBufferData} generateBuffers={generateBuffers}
+                                worker={worker} subscribe={subscribeToPhysicsUpdates}/>
             <AppContext.Provider value={{
                 world,
                 addSyncedBody,
