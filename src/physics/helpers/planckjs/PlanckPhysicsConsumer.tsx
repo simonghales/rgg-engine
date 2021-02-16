@@ -1,6 +1,7 @@
 import React from "react"
 import {PhysicsConsumer} from "../../../index";
-import {lerpBody, updateBodyData} from "./updates";
+import {lerpBody, prepareObject, updateBodyData} from "./updates";
+import PhysicsConsumerHelpers from "./PhysicsConsumerHelpers";
 
 const PlanckPhysicsConsumer: React.FC<{
     worker: Worker,
@@ -8,7 +9,9 @@ const PlanckPhysicsConsumer: React.FC<{
 }> = ({worker, stepRate, children}) => {
     return (
         <PhysicsConsumer updateBodyData={updateBodyData} lerpBody={lerpBody} worker={worker} stepRate={stepRate}>
-            {children}
+            <PhysicsConsumerHelpers prepareObject={prepareObject}>
+                {children}
+            </PhysicsConsumerHelpers>
         </PhysicsConsumer>
     )
 }

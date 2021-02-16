@@ -1,4 +1,4 @@
-import {Buffers} from "./types";
+import {AddBodyDef, Buffers} from "./types";
 import {Body} from "planck-js";
 import {getNow} from "../../../utils/time";
 import {lerp} from "../../../utils/numbers";
@@ -18,6 +18,15 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         lastUpdate,
         previous,
     } = body
+
+    if (!position || !angle) return
+
+    if (!previous.position || !previous.angle) {
+        object.position.x = position[0]
+        object.position.y = position[1]
+        object.rotation.z = angle as number
+        return
+    }
 
     const now = getNow()
 
@@ -103,4 +112,14 @@ export const applyBufferData = (
         angles[index] = angle;
     })
 
+}
+
+export const prepareObject = (object: Object3D, props: AddBodyDef) => {
+    if (props.body.position) {
+        object.position.x = props.body.position.x
+        object.position.y = props.body.position.y
+    }
+    if (props.body.angle) {
+        object.rotation.z = props.body.angle
+    }
 }

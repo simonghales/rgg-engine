@@ -9,7 +9,7 @@ const useCannonPhysics = () => {
 
     useEffect(() => {
         const cannonWorld = new World()
-        cannonWorld.gravity.set(0, -10, 0)
+        cannonWorld.gravity.set(0, -9.81, 0)
         setWorld(cannonWorld)
     }, [])
 

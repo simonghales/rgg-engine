@@ -1,5 +1,15 @@
 // import React, {useEffect, useState} from "react"
-// const RAPIER = import('@dimforge/rapier3d');
+// // const RAPIER = import('@dimforge/rapier3d');
+//
+// // @ts-ignore
+// global.document = {
+//     // @ts-ignore
+//     createElement: () => {}
+// }
+//
+// // RAPIER.then(() => {
+// //     console.log('SOMETHING?')
+// // })
 //
 // const useRapier3dPhysics = () => {
 //
@@ -8,13 +18,11 @@
 //     useEffect(() => {
 //         console.log('load rapier physics')
 //
-//         RAPIER.then(() => {
-//             console.log('SOMETHING?')
+//         import('@dimforge/rapier3d').then((RAPIER) => {
+//             console.log('loaded rapier physics...', RAPIER)
+//         }).catch((error) => {
+//             console.error(error)
 //         })
-//
-//         // import('@dimforge/rapier3d').then((RAPIER) => {
-//         //     console.log('loaded rapier physics...', RAPIER)
-//         // })
 //
 //     }, [])
 //

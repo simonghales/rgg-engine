@@ -7,7 +7,6 @@ const Physics: React.FC<{
     onWorldStep: OnWorldStepFn,
     stepRate?: number,
 }> = ({children, onWorldStep, stepRate = DEFAULT_STEP_RATE}) => {
-    console.log('i am physics...')
     return (
         <PhysicsProvider onWorldStep={onWorldStep} stepRate={stepRate}>
             {children}

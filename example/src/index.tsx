@@ -9,10 +9,6 @@ import {STEP_RATE} from "./config";
 
 const worker = new Worker("../src/webWorker.ts")
 
-// import('@dimforge/rapier3d').then((RAPIER) => {
-//     console.log('loaded rapier physics...', RAPIER)
-// })
-
 const App = () => {
   return (
     <Canvas>

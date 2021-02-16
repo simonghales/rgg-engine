@@ -1,9 +1,10 @@
-import {Buffers} from "../planckjs/types";
 import {Body} from "cannon-es";
 import {BodyData} from "../../types";
-import {Object3D} from "three";
+import {Object3D, Quaternion} from "three";
 import {getNow} from "../../../utils/time";
 import {lerp} from "../../../utils/numbers";
+import { AddBodyDef } from "./types";
+import { Buffers } from "../planckjs/types";
 
 export const applyBufferData = (
     buffers: Buffers,
@@ -32,6 +33,8 @@ export const applyBufferData = (
 
 }
 
+const quat = new Quaternion()
+
 export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => {
     const {
         position,
@@ -39,6 +42,14 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         lastUpdate,
         previous,
     } = body
+
+    if (!position || !angle) return
+
+    if (!previous.position || !previous.angle) {
+        object.position.set(...position as [number, number, number])
+        object.quaternion.set(...angle as [number, number, number, number])
+        return
+    }
 
     const now = getNow()
 
@@ -71,8 +82,9 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         physicsRemainingRatio
     );
 
-    // todo - lerp
-    object.quaternion.fromArray(angle as [number, number, number, number])
+    object.quaternion.fromArray(previous.angle as [number, number, number, number])
+    quat.fromArray(angle as [number, number, number, number])
+    object.quaternion.slerp(quat, physicsRemainingRatio)
 }
 
 const getPositionAndAngle = (
@@ -90,7 +102,7 @@ const getPositionAndAngle = (
             number,
         ];
         const angleStart = index * 4;
-        const angle = (buffers.angles.slice(angleStart, start + 4) as unknown) as [
+        const angle = (buffers.angles.slice(angleStart, angleStart + 4) as unknown) as [
             number,
             number,
             number,
@@ -115,5 +127,14 @@ export const updateBodyData = (bodyData: BodyData, positions: Float32Array, angl
     if (update) {
         bodyData.position = update.position
         bodyData.angle = update.angle
+    }
+}
+
+export const prepareObject = (object: Object3D, props: AddBodyDef) => {
+    if (props.body.position) {
+        object.position.set(...((props.body.position.toArray() || [0, 0, 0]) as [number, number, number]))
+    }
+    if (props.body.quaternion) {
+        object.quaternion.set(...((props.body.quaternion.toArray() || [0, 0, 0, 0]) as [number, number, number, number]))
     }
 }

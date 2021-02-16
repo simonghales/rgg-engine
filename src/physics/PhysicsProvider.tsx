@@ -4,6 +4,9 @@ import {OnWorldStepFn} from "./types";
 import {createNewPhysicsLoopWebWorker} from "./physicsLoopWorker";
 import {getNow} from "../utils/time";
 
+let now = 0
+let delta = 0
+
 const usePhysicsWorldStepHandler = (onWorldStep: OnWorldStepFn, stepRate: number, paused: boolean) => {
 
     const localStateRef = useRef({
@@ -14,8 +17,8 @@ const usePhysicsWorldStepHandler = (onWorldStep: OnWorldStepFn, stepRate: number
         stepWorld
     } = useMemo(() => ({
         stepWorld: () => {
-            const now = getNow()
-            const delta = now - localStateRef.current.lastUpdate
+            now = getNow()
+            delta = now - localStateRef.current.lastUpdate
             localStateRef.current.lastUpdate = now
             if (paused) return
             onWorldStep(delta)
@@ -30,8 +33,13 @@ const usePhysicsWorldStepHandler = (onWorldStep: OnWorldStepFn, stepRate: number
 
     useEffect(() => {
         const worker = createNewPhysicsLoopWebWorker(stepRate)
+        // let lastStep = getNow()
         worker.onmessage = (event) => {
             if (event.data === 'step') {
+                // const now = getNow()
+                // const delta = now - lastStep
+                // lastStep = now
+                // console.log('delta', delta)
                 stepWorldRef.current()
             }
         }

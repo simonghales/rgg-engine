@@ -17,9 +17,14 @@ const PhysicsConsumer: React.FC<{
     const [bodiesData] = useState<{
         [id: string]: BodyData
     }>({})
-    const localStateRef = useRef({
+    const localStateRef = useRef<{
+        lastUpdate: number,
+        subscriptionsIterator: number,
+        bodies: string[],
+    }>({
         lastUpdate: getNow(),
         subscriptionsIterator: 0,
+        bodies: []
     })
     const onFixedUpdateSubscriptions = useRef<{
         [key: string]: MutableRefObject<(delta: number) => void>,
@@ -35,6 +40,10 @@ const PhysicsConsumer: React.FC<{
     }, [])
 
     const onUpdate = useCallback((updateTime: number, positions: Float32Array, angles: Float32Array, bodies: undefined | string[]) => {
+
+        if (bodies) {
+            localStateRef.current.bodies = bodies
+        }
 
         Object.entries(bodiesData).forEach(([id, bodyData]) => {
             if (bodies) {
@@ -78,7 +87,6 @@ const PhysicsConsumer: React.FC<{
                     setConnected(true)
                     break;
                 case WorkerMessageType.PHYSICS_UPDATE:
-
                     onUpdate(message.updateTime, message.positions, message.angles, message.bodies)
 
                     worker.postMessage({
@@ -111,19 +119,12 @@ const PhysicsConsumer: React.FC<{
         },
         syncBody: (id: string, ref: MutableRefObject<Object3D>) => {
             localStateRef.current.subscriptionsIterator += 1
-            const position: [number, number] = [ref.current.position.x, ref.current.position.y]
-            const angle = ref.current.rotation.z
             const body = {
                 ref,
-                index: -1,
-                position,
-                angle,
-                previous: {
-                    position,
-                    angle,
-                },
+                index: localStateRef.current.bodies.indexOf(id),
                 lastUpdate: getNow(),
                 lastRender: getNow(),
+                previous: {},
             }
             bodiesData[id] = body
             onFrameCallbacks.current[id] = () => lerpMesh(body, ref)

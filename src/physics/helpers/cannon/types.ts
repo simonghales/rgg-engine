@@ -3,7 +3,7 @@ import {BodyOptions} from "objects/Body";
 export type AddBodyDef = {
     body: Partial<BodyOptions>,
     shapes: {
-        type: 'Sphere',
+        type: 'Sphere' | 'Box',
         args?: any[],
     }[],
 }

@@ -11,6 +11,7 @@ import { FixtureShape } from './physics/helpers/planckjs/types';
 import CannonApp from './physics/helpers/cannon/CannonApp';
 import PlanckPhysicsConsumer from './physics/helpers/planckjs/PlanckPhysicsConsumer';
 import CannonPhysicsConsumer from './physics/helpers/cannon/CannonPhysicsConsumer';
+// import Rapier3DApp from './physics/helpers/rapier3d/Rapier3DApp';
 
 // Delete me
 export const Thing = () => {
@@ -33,4 +34,5 @@ export {
   FixtureShape,
   PlanckPhysicsConsumer,
   CannonPhysicsConsumer,
+  // Rapier3DApp,
 }
