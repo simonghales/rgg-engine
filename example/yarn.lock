@@ -842,6 +842,11 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@dimforge/rapier3d-compat@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@dimforge/rapier3d-compat/-/rapier3d-compat-0.3.1.tgz#897f401bf07c001493b0bb9aaea6ce401209a299"
+  integrity sha512-/iNB54hDv479p+CUQfTJBe42jrkkoNXH7xNrkc8kFj337VSKrlzlwS54d5M4VHglhpq5P8aZnvafbiSjDT/Ldw==
+
 "@dimforge/rapier3d@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@dimforge/rapier3d/-/rapier3d-0.3.1.tgz#2a2fc8895498e6142ea305317761204f32b985b6"

@@ -8,9 +8,19 @@ const useCannonPhysics = () => {
     const [world, setWorld] = useState<World | null>(null)
 
     useEffect(() => {
+
         const cannonWorld = new World()
         cannonWorld.gravity.set(0, -9.81, 0)
         setWorld(cannonWorld)
+
+        cannonWorld.addEventListener('beginContact', () => {
+            // todo
+        })
+
+        cannonWorld.addEventListener('endContact', () => {
+            // todo
+        })
+
     }, [])
 
     return {

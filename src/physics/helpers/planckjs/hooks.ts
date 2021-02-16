@@ -3,7 +3,6 @@ import {MutableRefObject, useCallback, useEffect, useLayoutEffect, useRef, useSt
 import {generateUUID} from "../../../utils/ids";
 import {usePhysicsConsumerContext} from "../../PhysicsConsumer.context";
 import {WorkerMessageType} from "../../types";
-import {AddBodyDef as CannonAddBodyDef} from "../cannon/types";
 import {Object3D} from "three";
 import {usePhysicsConsumerHelpers} from "./PhysicsConsumerHelpers";
 
@@ -41,13 +40,14 @@ export const useBodyApi = (id: string) => {
 
 }
 
-type Options = {
-    id: string,
-    synced: boolean,
-    ref: MutableRefObject<Object3D>,
+export type Options = {
+    id?: string,
+    synced?: boolean,
+    listenForCollisions?: boolean,
+    ref?: MutableRefObject<Object3D>,
 }
 
-export const useBody = (propsFn: () => AddBodyDef | CannonAddBodyDef | any, options: Partial<Options> = {}): [
+export const useBody = (propsFn: () =>  any, options: Partial<Options> = {}, addToMessage?: (props: any, options: Partial<Options>) => any): [
     MutableRefObject<Object3D>,
     string
 ] => {
@@ -93,6 +93,7 @@ export const useBody = (propsFn: () => AddBodyDef | CannonAddBodyDef | any, opti
                 id,
                 props,
                 synced: options.synced ?? true,
+                ...(addToMessage ? addToMessage(props, options) : {})
             },
         })
 
@@ -109,4 +110,11 @@ export const useBody = (propsFn: () => AddBodyDef | CannonAddBodyDef | any, opti
 
     return [options.ref || localRef, id]
 
+}
+
+export const usePlanckBody = (propsFn: () => AddBodyDef, options: Partial<Options> = {}): [
+    MutableRefObject<Object3D>,
+    string
+] => {
+    return useBody(propsFn, options)
 }

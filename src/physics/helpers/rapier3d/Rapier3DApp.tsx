@@ -1,38 +1,52 @@
-// import React, {useEffect, useState} from "react"
-// // const RAPIER = import('@dimforge/rapier3d');
-//
-// // @ts-ignore
-// global.document = {
-//     // @ts-ignore
-//     createElement: () => {}
-// }
-//
-// // RAPIER.then(() => {
-// //     console.log('SOMETHING?')
-// // })
-//
-// const useRapier3dPhysics = () => {
-//
-//     const [world, setWorld] = useState(null)
-//
-//     useEffect(() => {
-//         console.log('load rapier physics')
-//
-//         import('@dimforge/rapier3d').then((RAPIER) => {
-//             console.log('loaded rapier physics...', RAPIER)
-//         }).catch((error) => {
-//             console.error(error)
-//         })
-//
-//     }, [])
-//
-// }
-//
-// const Rapier3DApp: React.FC = () => {
-//
-//     useRapier3dPhysics()
-//
-//     return null
-// }
-//
-// export default Rapier3DApp
+import React, {useCallback, useEffect, useState} from "react"
+import * as RAPIER from "@dimforge/rapier3d-compat/rapier.js"
+import {DEFAULT_STEP_RATE} from "../../config";
+import Rapier3DPhysicsHandler from "./Rapier3DPhysicsHandler";
+
+const useRapier3dPhysics = (stepRate: number) => {
+
+    const [world, setWorld] = useState<RAPIER.World | null>(null)
+
+    const init = useCallback(async () => {
+        // @ts-ignore
+        await RAPIER.init()
+
+        const gravity = new RAPIER.Vector3(0.0, -9.81, 0.0);
+        const rapierWorld = new RAPIER.World(gravity);
+        rapierWorld.timestep = stepRate / 1000
+        setWorld(rapierWorld)
+
+    }, [])
+
+    useEffect(() => {
+        init()
+    }, [])
+
+    return {
+        world,
+    }
+
+}
+
+const Rapier3DApp: React.FC<{
+    worker: Worker,
+    stepRate?: number,
+    maxNumberOfSyncedBodies?: number,
+}> = ({
+                             children,
+                             stepRate = DEFAULT_STEP_RATE,
+                             maxNumberOfSyncedBodies = 100,
+                             worker}) => {
+
+    const {world} = useRapier3dPhysics(stepRate)
+
+    if (!world) return null
+
+    return (
+        <Rapier3DPhysicsHandler world={world} worker={worker} stepRate={stepRate} maxNumberOfSyncedBodies={maxNumberOfSyncedBodies}>
+            {children}
+        </Rapier3DPhysicsHandler>
+    )
+}
+
+export default Rapier3DApp

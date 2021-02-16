@@ -6,4 +6,7 @@ export type AddBodyDef = {
         type: 'Sphere' | 'Box',
         args?: any[],
     }[],
+    userData?: {
+        [key: string]: any,
+    }
 }

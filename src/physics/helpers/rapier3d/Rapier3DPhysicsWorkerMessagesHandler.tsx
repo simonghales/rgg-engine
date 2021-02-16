@@ -1,17 +1,17 @@
 import React, {useEffect, useMemo} from "react"
-import {WorkerMessageData, WorkerMessageType} from "../../types";
+import {World, RigidBodyDesc, ColliderDesc} from "@dimforge/rapier3d-compat/rapier.js";
 import {usePlanckAppContext} from "../planckjs/PlanckApp.context";
-import {World} from "cannon-es";
+import {WorkerMessageData, WorkerMessageType} from "../../types";
 import {AddBodyDef} from "./types";
 import {createBody} from "./bodies";
 
-const CannonPhysicsWorkerMessagesHandler: React.FC<{
+const Rapier3DPhysicsWorkerMessagesHandler: React.FC<{
     world: World,
     worker: Worker,
 }> = ({
     world,
-                                                    worker,
-                                                }) => {
+    worker,
+    }) => {
 
     const {
         addBody,
@@ -34,22 +34,15 @@ const CannonPhysicsWorkerMessagesHandler: React.FC<{
             }
             (body as any)[method](...args)
         },
-        handleAddBody: ({id, props, synced, listenForCollisions}: {
+        handleAddBody: ({id, props, synced}: {
             id: string,
             props: AddBodyDef,
             synced: boolean,
             listenForCollisions?: boolean,
         }) => {
+
             const body = createBody(world, props)
-            // @ts-ignore
-            body.userData = {
-                id,
-                ...(props.userData ?? {}),
-            }
             addBody(id, body, synced)
-            if (listenForCollisions) {
-                console.log('listenForCollisions')
-            }
         }
     }), [])
 
@@ -80,4 +73,4 @@ const CannonPhysicsWorkerMessagesHandler: React.FC<{
     return null
 }
 
-export default CannonPhysicsWorkerMessagesHandler
+export default Rapier3DPhysicsWorkerMessagesHandler

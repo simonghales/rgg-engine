@@ -21,6 +21,7 @@
   },
   "peerDependencies": {
     "@dimforge/rapier3d": ">=0.3",
+    "@dimforge/rapier3d-compat": ">=0.3",
     "cannon-es": ">=0.16",
     "planck-js": ">=0.3",
     "react": ">=16",
@@ -53,6 +54,7 @@
   ],
   "devDependencies": {
     "@dimforge/rapier3d": "^0.3.1",
+    "@dimforge/rapier3d-compat": "^0.3.1",
     "@size-limit/preset-small-lib": "^4.9.2",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",

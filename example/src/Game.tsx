@@ -1,9 +1,16 @@
 import {Box, Sphere } from "@react-three/drei"
 import React, {useEffect, useRef} from "react"
 import {Object3D} from "three";
-import {FixtureShape, useBody, useBodyApi, useOnFixedUpdate, usePhysicsConsumerContext} from "../../src";
+import {
+    FixtureShape,
+    usePlanckBody,
+    useBodyApi,
+    useOnFixedUpdate,
+    usePhysicsConsumerContext,
+    useCannonBody
+} from "../../src";
 import {Vec2} from "planck-js";
-import { Vec3, Quaternion } from "cannon-es";
+import { Vec3, Quaternion, Body } from "cannon-es";
 
 // useBody(() => ({
 //     body: {
@@ -26,7 +33,7 @@ import { Vec3, Quaternion } from "cannon-es";
 
 const Game: React.FC = () => {
 
-    const [sphereRef] = useBody(() => ({
+    const [sphereRef] = useCannonBody(() => ({
         body: {
             mass: 1,
             position: new Vec3(0, 20, -5)
@@ -37,7 +44,7 @@ const Game: React.FC = () => {
         }],
     }))
 
-    const [sphere2Ref] = useBody(() => ({
+    const [sphere2Ref] = useCannonBody(() => ({
         body: {
             mass: 1,
             position: new Vec3(0, 10, -5)
@@ -48,19 +55,21 @@ const Game: React.FC = () => {
         }],
     }))
 
-    const [staticBoxRef] = useBody(() => ({
+    const [staticBoxRef] = useCannonBody(() => ({
         body: {
             position: new Vec3(0, -5, -5),
             quaternion: new Quaternion().setFromEuler(0, 0, 0.05),
-            type: "static",
+            type: Body.STATIC,
         },
         shapes: [{
             type: 'Box',
             args: [2, 2, 2],
         }],
-    }))
+    }), {
+        listenForCollisions: true,
+    })
 
-    const [boxRef] = useBody(() => ({
+    const [boxRef] = useCannonBody(() => ({
         body: {
             mass: 1,
             position: new Vec3(0, 5, -5)

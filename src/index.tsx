@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { createWorkerApp } from './createWorkerApp';
 import Physics from './physics/Physics';
 import PlanckApp from "./physics/helpers/planckjs/PlanckApp";
@@ -6,18 +5,15 @@ import PhysicsConsumer from './physics/PhysicsConsumer';
 import PhysicsConsumerSyncMeshes from './physics/PhysicsConsumerSyncMeshes';
 import { usePhysicsConsumerContext } from './physics/PhysicsConsumer.context';
 import { usePlanckAppContext } from './physics/helpers/planckjs/PlanckApp.context';
-import { useBody, useBodyApi, useOnFixedUpdate } from './physics/helpers/planckjs/hooks';
+import { usePlanckBody, useBodyApi, useOnFixedUpdate } from './physics/helpers/planckjs/hooks';
 import { FixtureShape } from './physics/helpers/planckjs/types';
 import CannonApp from './physics/helpers/cannon/CannonApp';
 import PlanckPhysicsConsumer from './physics/helpers/planckjs/PlanckPhysicsConsumer';
 import CannonPhysicsConsumer from './physics/helpers/cannon/CannonPhysicsConsumer';
-// import Rapier3DApp from './physics/helpers/rapier3d/Rapier3DApp';
-
-// Delete me
-export const Thing = () => {
-  return <div>the snozzberries taste like snozzberries</div>;
-};
-
+import { useCannonBody } from './physics/helpers/cannon/hooks';
+import Rapier3DApp from './physics/helpers/rapier3d/Rapier3DApp';
+import Rapier3DPhysicsConsumer from './physics/helpers/rapier3d/Rapier3DPhysicsConsumer';
+import { useRapier3DBody } from './physics/helpers/rapier3d/hooks';
 
 export {
   createWorkerApp,
@@ -28,11 +24,14 @@ export {
   PhysicsConsumerSyncMeshes,
   usePhysicsConsumerContext,
   usePlanckAppContext,
-  useBody,
+  usePlanckBody,
   useBodyApi,
   useOnFixedUpdate,
   FixtureShape,
   PlanckPhysicsConsumer,
   CannonPhysicsConsumer,
-  // Rapier3DApp,
+  useCannonBody,
+  Rapier3DApp,
+  Rapier3DPhysicsConsumer,
+  useRapier3DBody,
 }

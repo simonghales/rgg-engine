@@ -4,6 +4,7 @@ import {AddBodyDef} from "./types";
 export const createBody = (world: World, bodyDef: AddBodyDef) => {
 
     const body = new Body(bodyDef.body);
+
     bodyDef.shapes.forEach(({type, args}) => {
         switch (type) {
             case 'Box':
