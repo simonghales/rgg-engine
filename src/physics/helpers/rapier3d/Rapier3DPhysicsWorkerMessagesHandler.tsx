@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from "react"
-import {World, RigidBodyDesc, ColliderDesc} from "@dimforge/rapier3d-compat/rapier.js";
+import {World} from "@dimforge/rapier3d-compat/rapier.js";
 import {usePlanckAppContext} from "../planckjs/PlanckApp.context";
 import {WorkerMessageData, WorkerMessageType} from "../../types";
 import {AddBodyDef} from "./types";
