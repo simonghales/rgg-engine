@@ -64,14 +64,14 @@ export const useBody = (propsFn: () =>  any, options: Partial<Options> = {}, add
         prepareObject
     } = usePhysicsConsumerHelpers() || {}
 
-    const ref = options.ref || localRef
+    const [ref] = useState(() => options.ref || localRef)
 
     // @ts-ignore
     useLayoutEffect(() => {
         if (!ref.current) {
             ref.current = new Object3D()
         }
-        return syncBody(id, options.ref as MutableRefObject<Object3D>)
+        return syncBody(id, ref as MutableRefObject<Object3D>)
     }, [])
 
     useLayoutEffect(() => {
