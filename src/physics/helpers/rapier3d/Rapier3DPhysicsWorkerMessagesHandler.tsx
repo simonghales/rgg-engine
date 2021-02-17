@@ -56,11 +56,11 @@ const Rapier3DPhysicsWorkerMessagesHandler: React.FC<{
         handleRemoveBody: ({id}: {
             id: string
         }) => {
+            const body = bodies[id]
+            world.removeRigidBody(body)
             if (localStateRef.current.removeCallbacks[id]) {
                 localStateRef.current.removeCallbacks[id]()
             }
-            const body = bodies[id]
-            world.removeRigidBody(body)
         }
     }), [])
 
