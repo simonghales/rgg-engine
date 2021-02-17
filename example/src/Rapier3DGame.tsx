@@ -1,8 +1,8 @@
 import React from "react"
 import {useRapier3DBody} from "../../src";
 import {BodyStatus} from "@dimforge/rapier3d-compat";
-import {Box, Sphere, Text} from "@react-three/drei";
-import {Quaternion} from "cannon-es";
+import {Box, Plane, Sphere, Text} from "@react-three/drei";
+import {Euler, Quaternion} from "three";
 
 const Rapier3DGame: React.FC = () => {
 
@@ -46,7 +46,7 @@ const Rapier3DGame: React.FC = () => {
         body: {
             type: BodyStatus.Static,
             position: [0, -5, -5],
-            quaternion: new Quaternion().setFromEuler(Math.PI / 4, Math.PI / 4, Math.PI / 4).toArray(),
+            // quaternion: new Quaternion().setFromEuler(Math.PI / 4, Math.PI / 4, Math.PI / 4).toArray(),
         },
         colliders: [{
             type: 'Cubiod',
@@ -87,8 +87,23 @@ const Rapier3DGame: React.FC = () => {
         }]
     }))
 
+    const [testRef] = useRapier3DBody(() => ({
+        body: {
+            type: BodyStatus.Static,
+            position: [0, -5, -5],
+            quaternion: new Quaternion().setFromEuler(new Euler(Math.PI / 4, Math.PI / 4, Math.PI / 4)).toArray() as [number, number, number, number],
+        },
+        colliders: [{
+            type: 'Cubiod',
+            args: [2, 2, 2],
+        }]
+    }))
+
     return (
         <>
+            <Box args={[2, 2, 2]} ref={testRef}>
+                <meshBasicMaterial color="orange" />
+            </Box>
             <Box args={[2, 2, 2]} ref={staticBoxRef}>
                 <meshBasicMaterial color="orange"/>
             </Box>

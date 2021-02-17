@@ -9,8 +9,8 @@ export type ColliderDef = {
 export type AddBodyDef = {
     body: {
         type: BodyStatus,
-        position?: [number, number, number],
-        quaternion?: [number, number, number, number],
+        position?: [number, number, number] | number[],
+        quaternion?: [number, number, number, number] | number[],
         mass?: number,
     },
     colliders: ColliderDef[]

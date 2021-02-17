@@ -31,10 +31,12 @@ export const applyBufferData = (
 }
 
 export const prepareObject = (object: Object3D, props: AddBodyDef) => {
+    console.log('prepareObject', props)
     if (props.body.position) {
         object.position.set(...props.body.position)
     }
     if (props.body.quaternion) {
+        console.log('setting quaternion')
         object.quaternion.set(...props.body.quaternion)
     }
 }
