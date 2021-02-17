@@ -1,4 +1,4 @@
-import React, {useMemo} from "react"
+import React, {useMemo, useState} from "react"
 import {World} from "@dimforge/rapier3d-compat/rapier.js";
 import {usePhysics} from "../planckjs/PlanckPhysicsHandler";
 import {Context} from "../planckjs/PlanckPhysicsHandler.context";
@@ -34,14 +34,17 @@ const Rapier3DPhysicsHandler: React.FC<{
         onUpdate,
     } = usePhysics()
 
+    const [paused, setPaused] = useState(false)
+
     const {
         onWorldStep
     } = useMemo(() => ({
         onWorldStep: () => {
+            if (paused) return
             world.step()
             onUpdate()
         }
-    }), [])
+    }), [paused])
 
     return (
         <Context.Provider value={{
@@ -51,7 +54,7 @@ const Rapier3DPhysicsHandler: React.FC<{
             maxNumberOfSyncedBodies,
         }}>
             <WorkerSubscription applyBufferData={applyBufferData} generateBuffers={generateBuffers}
-                                worker={worker} subscribe={subscribeToPhysicsUpdates}/>
+                                worker={worker} subscribe={subscribeToPhysicsUpdates} setPaused={setPaused}/>
             <AppContext.Provider value={{
                 world,
                 addSyncedBody,

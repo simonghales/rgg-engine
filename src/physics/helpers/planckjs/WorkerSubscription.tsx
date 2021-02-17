@@ -10,7 +10,8 @@ const WorkerSubscription: React.FC<{
     subscribe: (callback: () => void) => () => void,
     applyBufferData: ApplyBufferDataFn,
     generateBuffers: (maxNumberOfSyncedBodies: number) => Buffers,
-}> = ({worker, subscribe, applyBufferData, generateBuffers}) => {
+    setPaused?: (paused: boolean) => void,
+}> = ({worker, subscribe, applyBufferData, generateBuffers, setPaused}) => {
 
     const {
         getPendingSyncedBodiesIteration,
@@ -98,7 +99,15 @@ const WorkerSubscription: React.FC<{
                     buffers.angles = message.angles
                     setBuffersAvailable(true)
                     break;
+                case WorkerMessageType.PHYSICS_SET_PAUSED:
+                    if (setPaused) {
+                        setPaused(message.paused ?? false)
+                    }
+                    break;
                 case WorkerMessageType.PHYSICS_READY:
+                    if (setPaused) {
+                        setPaused(message.paused ?? false)
+                    }
                     setBuffersAvailable(true)
                     worker.postMessage({
                         type: WorkerMessageType.PHYSICS_ACKNOWLEDGED,

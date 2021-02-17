@@ -3,15 +3,25 @@ import {BodyData, WorkerMessageData, WorkerMessageType} from "./types";
 import {getNow} from "../utils/time";
 import {Object3D} from "three";
 import {DEFAULT_STEP_RATE} from "./config";
-import { Context } from "./PhysicsConsumer.context";
+import {Context} from "./PhysicsConsumer.context";
 import {PhysicsConsumerSyncMeshes} from "../index";
 
-const PhysicsConsumer: React.FC<{
+export type DefaultPhysicsConsumerProps = {
     worker: Worker,
     stepRate?: number,
+    paused?: boolean,
+}
+
+const PhysicsConsumer: React.FC<DefaultPhysicsConsumerProps & {
     lerpBody: (body: BodyData, object: Object3D, stepRate: number) => void,
     updateBodyData: (bodyData: BodyData, positions: Float32Array, angles: Float32Array) => void,
-}> = ({updateBodyData, worker, children, stepRate = DEFAULT_STEP_RATE, lerpBody}) => {
+}> = ({
+            paused = false,
+          updateBodyData,
+          worker,
+          children,
+          stepRate = DEFAULT_STEP_RATE, lerpBody
+      }) => {
 
     const [connected, setConnected] = useState(false)
     const [bodiesData] = useState<{
@@ -67,12 +77,20 @@ const PhysicsConsumer: React.FC<{
         const interval = setInterval(() => {
             worker.postMessage({
                 type: WorkerMessageType.PHYSICS_READY,
+                paused,
             })
         }, 200)
         return () => {
             clearInterval(interval)
         }
-    }, [connected])
+    }, [connected, paused])
+
+    useEffect(() => {
+        worker.postMessage({
+            type: WorkerMessageType.PHYSICS_SET_PAUSED,
+            paused,
+        })
+    }, [paused])
 
     useEffect(() => {
 
