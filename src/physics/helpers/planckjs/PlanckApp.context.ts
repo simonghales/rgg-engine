@@ -4,7 +4,7 @@ export type State = {
     world: any,
     addSyncedBody: (uid: string, body: any) => void,
     removeSyncedBody: (uid: string) => void,
-    addBody: (id: string, body: any, synced?: boolean) => void,
+    addBody: (id: string, body: any, synced?: boolean) => () => void,
     bodies: {
         [key: string]: any,
     },

@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from "react"
+import React, {useEffect, useMemo, useRef} from "react"
 import {World} from "@dimforge/rapier3d-compat/rapier.js";
 import {usePlanckAppContext} from "../planckjs/PlanckApp.context";
 import {WorkerMessageData, WorkerMessageType} from "../../types";
@@ -18,9 +18,18 @@ const Rapier3DPhysicsWorkerMessagesHandler: React.FC<{
         bodies,
     } = usePlanckAppContext()
 
+    const localStateRef = useRef<{
+        removeCallbacks: {
+            [key: string]: () => void,
+        }
+    }>({
+        removeCallbacks: {},
+    })
+
     const {
         handleAddBody,
         handleModifyBody,
+        handleRemoveBody,
     } = useMemo(() => ({
         handleModifyBody: ({id, method, args}: {
             id: string,
@@ -42,7 +51,14 @@ const Rapier3DPhysicsWorkerMessagesHandler: React.FC<{
         }) => {
 
             const body = createBody(world, props)
-            addBody(id, body, synced)
+            localStateRef.current.removeCallbacks[id] = addBody(id, body, synced)
+        },
+        handleRemoveBody: ({id}: {
+            id: string
+        }) => {
+            if (localStateRef.current.removeCallbacks[id]) {
+                localStateRef.current.removeCallbacks[id]()
+            }
         }
     }), [])
 
@@ -57,6 +73,9 @@ const Rapier3DPhysicsWorkerMessagesHandler: React.FC<{
             switch (message.type) {
                 case WorkerMessageType.ADD_BODY:
                     handleAddBody(message.data)
+                    break;
+                case WorkerMessageType.REMOVE_BODY:
+                    handleRemoveBody(message.data)
                     break;
                 case WorkerMessageType.MODIFY_BODY:
                     handleModifyBody(message.data)
