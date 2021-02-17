@@ -132,9 +132,9 @@ export const updateBodyData = (bodyData: BodyData, positions: Float32Array, angl
 
 export const prepareObject = (object: Object3D, props: AddBodyDef) => {
     if (props.body.position) {
-        object.position.set(...((props.body.position.toArray() || [0, 0, 0]) as [number, number, number]))
+        object.position.set(...props.body.position.toArray())
     }
     if (props.body.quaternion) {
-        object.quaternion.set(...((props.body.quaternion.toArray() || [0, 0, 0, 0]) as [number, number, number, number]))
+        object.quaternion.set(...props.body.quaternion.toArray())
     }
 }

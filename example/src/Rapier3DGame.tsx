@@ -46,7 +46,7 @@ const Rapier3DGame: React.FC = () => {
         body: {
             type: BodyStatus.Static,
             position: [0, -5, -5],
-            // quaternion: new Quaternion().setFromEuler(0, 0, 0.05).toArray(),
+            quaternion: new Quaternion().setFromEuler(Math.PI / 4, Math.PI / 4, Math.PI / 4).toArray(),
         },
         colliders: [{
             type: 'Cubiod',
