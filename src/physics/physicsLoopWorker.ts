@@ -1,15 +1,3 @@
-
-/*
-
-
-start: 0
-update at 0
-next update should be 0 + stepRate
-update at 31
-next update should be
-
- */
-
 export const createNewPhysicsLoopWebWorker = (stepRate: number) => {
     return new Worker('data:application/javascript,' +
         encodeURIComponent(`

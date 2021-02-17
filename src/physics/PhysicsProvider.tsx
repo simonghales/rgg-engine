@@ -36,8 +36,8 @@ const usePhysicsWorldStepHandler = (onWorldStep: OnWorldStepFn, stepRate: number
         // let lastStep = getNow()
         worker.onmessage = (event) => {
             if (event.data === 'step') {
-                // const now = getNow()
-                // const delta = now - lastStep
+                // now = getNow()
+                // delta = now - lastStep
                 // lastStep = now
                 // console.log('delta', delta)
                 stepWorldRef.current()

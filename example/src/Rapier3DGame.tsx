@@ -93,19 +93,22 @@ const Rapier3DGame: React.FC = () => {
                 <meshBasicMaterial color="orange"/>
             </Box>
             <group ref={rRef}>
-                <Text fontSize={1.5}>
-                    R
-                </Text>
+                {/*<Text fontSize={1.5}>*/}
+                {/*    R*/}
+                {/*</Text>*/}
+                <Box/>
             </group>
             <group ref={gRef}>
-                <Text fontSize={1.5}>
-                    G
-                </Text>
+                {/*<Text fontSize={1.5}>*/}
+                {/*    G*/}
+                {/*</Text>*/}
+                <Box/>
             </group>
             <group ref={boxRef}>
-                <Text fontSize={1.5}>
-                    G
-                </Text>
+                {/*<Text fontSize={1.5}>*/}
+                {/*    G*/}
+                {/*</Text>*/}
+                <Box/>
             </group>
             <Sphere ref={ref}>
                 <meshBasicMaterial color="red"/>
