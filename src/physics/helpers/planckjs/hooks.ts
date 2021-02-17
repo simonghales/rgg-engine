@@ -67,6 +67,9 @@ export const useBody = (propsFn: () =>  any, options: Partial<Options> = {}, add
     // @ts-ignore
     useLayoutEffect(() => {
         if (options.ref) {
+            if (!options.ref.current) {
+                options.ref.current = new Object3D()
+            }
             return syncBody(id, options.ref)
         } else {
             if (!localRef.current) {
