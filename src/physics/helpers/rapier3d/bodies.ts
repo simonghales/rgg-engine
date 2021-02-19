@@ -8,7 +8,7 @@ const createColliderDesc = (colliderDef: ColliderDef): ColliderDesc | null => {
             return ColliderDesc.ball(...colliderDef.args);
         case "Cubiod":
             // @ts-ignore
-            return ColliderDesc.cuboid(...colliderDef.args.map(value => value / 2));
+            return ColliderDesc.cuboid(...colliderDef.args);
     }
     return null
 }
@@ -26,7 +26,7 @@ export const createBody = (world: World, bodyDef: AddBodyDef) => {
         rigidBodyDesc.setMass(bodyDef.body.mass)
     }
     if (bodyDef.body.position) {
-        rigidBodyDesc.setTranslation(...bodyDef.body.position)
+        rigidBodyDesc.setTranslation(...(bodyDef.body.position as [number, number, number]))
     }
     if (bodyDef.body.quaternion) {
         rigidBodyDesc.setRotation({
