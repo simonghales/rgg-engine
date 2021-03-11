@@ -14,6 +14,8 @@ import { useCannonBody } from './physics/helpers/cannon/hooks';
 import Rapier3DApp from './physics/helpers/rapier3d/Rapier3DApp';
 import Rapier3DPhysicsConsumer from './physics/helpers/rapier3d/Rapier3DPhysicsConsumer';
 import { useRapier3DBody } from './physics/helpers/rapier3d/hooks';
+import { createBody } from './physics/helpers/rapier3d/bodies';
+import { AddBodyDef } from './physics/helpers/rapier3d/types';
 
 export {
   createWorkerApp,
@@ -34,4 +36,6 @@ export {
   Rapier3DApp,
   Rapier3DPhysicsConsumer,
   useRapier3DBody,
+  createBody,
+  AddBodyDef,
 }
