@@ -57,7 +57,7 @@ export const useSyncBody = (id: string, ref: MutableRefObject<Object3D>) => {
             ref.current = new Object3D()
         }
         return syncBody(id, ref as MutableRefObject<Object3D>)
-    }, [])
+    }, [ref])
 }
 
 export const useBody = (propsFn: () =>  any, options: Partial<Options> = {}, addToMessage?: (props: any, options: Partial<Options>) => any): [
