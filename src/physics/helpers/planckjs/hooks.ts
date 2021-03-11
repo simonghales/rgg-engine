@@ -47,12 +47,13 @@ export type Options = {
     ref?: MutableRefObject<Object3D>,
 }
 
-export const useSyncBody = (id: string, ref: MutableRefObject<Object3D>) => {
+export const useSyncBody = (id: string, ref: MutableRefObject<Object3D> | undefined) => {
     const {
         syncBody
     } = usePhysicsConsumerContext()
     // @ts-ignore
     useLayoutEffect(() => {
+        if (!ref) return
         if (!ref.current) {
             ref.current = new Object3D()
         }
