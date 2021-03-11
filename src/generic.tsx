@@ -214,7 +214,7 @@ export const SyncComponents: React.FC<{
             worker.onmessage = previousOnMessage
         }
 
-    }, [handleCustomMessage])
+    }, [])
 
     return (
         <>
