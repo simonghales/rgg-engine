@@ -22,6 +22,7 @@ const createCollider = (world: World, body: RigidBody, colliderDef: ColliderDef)
 export const createBody = (world: World, bodyDef: AddBodyDef) => {
 
     const rigidBodyDesc = new RigidBodyDesc(bodyDef.body.type);
+
     if (bodyDef.body.mass != undefined) {
         rigidBodyDesc.setMass(bodyDef.body.mass)
     }
