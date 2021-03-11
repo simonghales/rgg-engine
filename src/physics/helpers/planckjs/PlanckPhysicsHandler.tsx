@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from "react";
-import {World} from "planck-js";
+import {World, Body} from "planck-js";
 import {Context} from "./PlanckPhysicsHandler.context";
 import {Context as AppContext} from "./PlanckApp.context";
 import Physics from "../../Physics";
@@ -141,6 +141,10 @@ const PlanckPhysicsHandler: React.FC<{
     maxNumberOfSyncedBodies: number,
 }> = ({children, world, worker, stepRate, maxNumberOfSyncedBodies}) => {
 
+    const removeBody = useCallback((body: Body) => {
+        world.destroyBody(body)
+    }, [])
+
     const {
         subscribeToPhysicsUpdates,
         getPendingSyncedBodiesIteration,
@@ -151,7 +155,7 @@ const PlanckPhysicsHandler: React.FC<{
         addBody,
         bodies,
         onUpdate,
-    } = usePhysics()
+    } = usePhysics(removeBody)
 
     const {
         onWorldStep
