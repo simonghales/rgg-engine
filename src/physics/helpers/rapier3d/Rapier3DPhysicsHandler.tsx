@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react"
+import React, {useCallback, useMemo, useState} from "react"
 import {World} from "@dimforge/rapier3d-compat/rapier.js";
 import {usePhysics} from "../planckjs/PlanckPhysicsHandler";
 import {Context} from "../planckjs/PlanckPhysicsHandler.context";
@@ -8,6 +8,7 @@ import {Context as AppContext} from "../planckjs/PlanckApp.context";
 import Physics from "../../Physics";
 import {applyBufferData} from "./updates";
 import Rapier3DPhysicsWorkerMessagesHandler from "./Rapier3DPhysicsWorkerMessagesHandler";
+import {removeBody} from "./bodies";
 
 const Rapier3DPhysicsHandler: React.FC<{
     world: World,
@@ -22,6 +23,10 @@ const Rapier3DPhysicsHandler: React.FC<{
     maxNumberOfSyncedBodies
 }) => {
 
+    const customRemoveBody = useCallback((body: any) => {
+        removeBody(world, body)
+    }, [])
+
     const {
         subscribeToPhysicsUpdates,
         getPendingSyncedBodiesIteration,
@@ -32,7 +37,7 @@ const Rapier3DPhysicsHandler: React.FC<{
         addBody,
         bodies,
         onUpdate,
-    } = usePhysics()
+    } = usePhysics(customRemoveBody)
 
     const [paused, setPaused] = useState(false)
 

@@ -2,6 +2,8 @@ import React, {useCallback, useEffect, useState} from "react"
 import * as RAPIER from "@dimforge/rapier3d-compat/rapier.js"
 import {DEFAULT_STEP_RATE} from "../../config";
 import Rapier3DPhysicsHandler from "./Rapier3DPhysicsHandler";
+import {CustomBodyModifiers, customData} from "./custom";
+import {WorkerMessaging} from "../../../generic";
 
 const useRapier3dPhysics = (stepRate: number) => {
 
@@ -32,20 +34,28 @@ const Rapier3DApp: React.FC<{
     worker: Worker,
     stepRate?: number,
     maxNumberOfSyncedBodies?: number,
+    customBodyModifiers?: CustomBodyModifiers
 }> = ({
                              children,
                              stepRate = DEFAULT_STEP_RATE,
                              maxNumberOfSyncedBodies = 100,
+                             customBodyModifiers = {},
                              worker}) => {
 
     const {world} = useRapier3dPhysics(stepRate)
 
+    useEffect(() => {
+        customData.customBodyModifiers = customBodyModifiers
+    }, [customBodyModifiers])
+
     if (!world) return null
 
     return (
-        <Rapier3DPhysicsHandler world={world} worker={worker} stepRate={stepRate} maxNumberOfSyncedBodies={maxNumberOfSyncedBodies}>
-            {children}
-        </Rapier3DPhysicsHandler>
+        <WorkerMessaging worker={worker}>
+            <Rapier3DPhysicsHandler world={world} worker={worker} stepRate={stepRate} maxNumberOfSyncedBodies={maxNumberOfSyncedBodies}>
+                {children}
+            </Rapier3DPhysicsHandler>
+        </WorkerMessaging>
     )
 }
 

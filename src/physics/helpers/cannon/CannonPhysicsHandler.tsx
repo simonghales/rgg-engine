@@ -1,5 +1,5 @@
-import { World } from "cannon-es"
-import React, {useMemo, useRef} from "react"
+import { World, Body } from "cannon-es"
+import React, {useCallback, useMemo, useRef} from "react"
 import {getNow} from "../../../utils/time";
 import Physics from "../../Physics";
 import WorkerSubscription from "../planckjs/WorkerSubscription";
@@ -17,6 +17,10 @@ const CannonPhysicsHandler: React.FC<{
     maxNumberOfSyncedBodies: number,
 }> = ({children, world, stepRate, worker, maxNumberOfSyncedBodies}) => {
 
+    const removeBody = useCallback((body: Body) => {
+        world.removeBody(body)
+    }, [])
+
     const {
         subscribeToPhysicsUpdates,
         getPendingSyncedBodiesIteration,
@@ -27,7 +31,7 @@ const CannonPhysicsHandler: React.FC<{
         addBody,
         bodies,
         onUpdate,
-    } = usePhysics()
+    } = usePhysics(removeBody)
 
     const localStateRef = useRef({
         lastUpdate: getNow()

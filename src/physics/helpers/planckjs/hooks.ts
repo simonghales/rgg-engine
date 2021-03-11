@@ -47,6 +47,20 @@ export type Options = {
     ref?: MutableRefObject<Object3D>,
 }
 
+export const useSyncBody = (id: string, ref: MutableRefObject<Object3D> | undefined) => {
+    const {
+        syncBody
+    } = usePhysicsConsumerContext()
+    // @ts-ignore
+    useLayoutEffect(() => {
+        if (!ref) return
+        if (!ref.current) {
+            ref.current = new Object3D()
+        }
+        return syncBody(id, ref as MutableRefObject<Object3D>)
+    }, [ref])
+}
+
 export const useBody = (propsFn: () =>  any, options: Partial<Options> = {}, addToMessage?: (props: any, options: Partial<Options>) => any): [
     MutableRefObject<Object3D>,
     string
@@ -57,22 +71,12 @@ export const useBody = (propsFn: () =>  any, options: Partial<Options> = {}, add
     const localRef = useRef<Object3D>(null as unknown as Object3D)
 
     const {
-        syncBody
-    } = usePhysicsConsumerContext()
-
-    const {
         prepareObject
     } = usePhysicsConsumerHelpers() || {}
 
     const [ref] = useState(() => options.ref || localRef)
 
-    // @ts-ignore
-    useLayoutEffect(() => {
-        if (!ref.current) {
-            ref.current = new Object3D()
-        }
-        return syncBody(id, ref as MutableRefObject<Object3D>)
-    }, [])
+    useSyncBody(id, ref)
 
     useLayoutEffect(() => {
 

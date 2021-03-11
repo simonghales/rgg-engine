@@ -12,6 +12,7 @@ export enum WorkerMessageType {
     ADD_BODY,
     REMOVE_BODY,
     MODIFY_BODY,
+    CUSTOM
 }
 
 export type WorkerMessageData = {

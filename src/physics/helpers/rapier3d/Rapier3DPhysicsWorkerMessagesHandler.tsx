@@ -4,6 +4,7 @@ import {usePlanckAppContext} from "../planckjs/PlanckApp.context";
 import {WorkerMessageData, WorkerMessageType} from "../../types";
 import {AddBodyDef} from "./types";
 import {createBody} from "./bodies";
+import {getCustomBodyModifier} from "./custom";
 
 const Rapier3DPhysicsWorkerMessagesHandler: React.FC<{
     world: World,
@@ -49,8 +50,11 @@ const Rapier3DPhysicsWorkerMessagesHandler: React.FC<{
             synced: boolean,
             listenForCollisions?: boolean,
         }) => {
-
             const body = createBody(world, props)
+            const customModifier = getCustomBodyModifier(props)
+            if (customModifier) {
+                customModifier(body)
+            }
             localStateRef.current.removeCallbacks[id] = addBody(id, body, synced)
         },
         handleRemoveBody: ({id}: {

@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from "react";
-import {World} from "planck-js";
+import {World, Body} from "planck-js";
 import {Context} from "./PlanckPhysicsHandler.context";
 import {Context as AppContext} from "./PlanckApp.context";
 import Physics from "../../Physics";
@@ -9,8 +9,7 @@ import {applyBufferData} from "./updates";
 import {generateBuffers} from "./buffers";
 
 
-
-export const usePhysicsBodies = () => {
+export const usePhysicsBodies = (removeBody: any) => {
 
     const [bodies] = useState<{
         [key: string]: any,
@@ -54,6 +53,9 @@ export const usePhysicsBodies = () => {
             delete bodies[uid]
             if (syncedUnsub) {
                 syncedUnsub()
+            }
+            if (removeBody) {
+                removeBody(body)
             }
         }
     }, [])
@@ -102,7 +104,7 @@ export const usePhysicsUpdate = () => {
 
 }
 
-export const usePhysics = () => {
+export const usePhysics = (removeBody: any = () => {}) => {
 
     const {
         addSyncedBody,
@@ -112,7 +114,7 @@ export const usePhysics = () => {
         syncedBodiesOrder,
         addBody,
         bodies,
-    } = usePhysicsBodies()
+    } = usePhysicsBodies(removeBody)
 
     const {
         onUpdate,
@@ -139,6 +141,10 @@ const PlanckPhysicsHandler: React.FC<{
     maxNumberOfSyncedBodies: number,
 }> = ({children, world, worker, stepRate, maxNumberOfSyncedBodies}) => {
 
+    const removeBody = useCallback((body: Body) => {
+        world.destroyBody(body)
+    }, [])
+
     const {
         subscribeToPhysicsUpdates,
         getPendingSyncedBodiesIteration,
@@ -149,7 +155,7 @@ const PlanckPhysicsHandler: React.FC<{
         addBody,
         bodies,
         onUpdate,
-    } = usePhysics()
+    } = usePhysics(removeBody)
 
     const {
         onWorldStep

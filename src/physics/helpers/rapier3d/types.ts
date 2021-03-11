@@ -13,5 +13,6 @@ export type AddBodyDef = {
         quaternion?: [number, number, number, number] | number[],
         mass?: number,
     },
-    colliders: ColliderDef[]
+    colliders: ColliderDef[],
+    customBody?: string,
 }
