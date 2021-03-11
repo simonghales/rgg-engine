@@ -126,7 +126,9 @@ export const SyncComponents: React.FC<{
     }
 }> = ({components}) => {
 
+
     const worker = useWorker()
+
     const [storedComponents, setComponents] = useState<{
         [key: string]: {
             id: string,
@@ -201,6 +203,11 @@ export const SyncComponents: React.FC<{
         const previousOnMessage = worker.onmessage
 
         worker.onmessage = (event: any) => {
+
+            if (previousOnMessage) {
+                // @ts-ignore
+                previousOnMessage(event)
+            }
 
             const message = event.data as WorkerMessageData
 

@@ -9,8 +9,7 @@ import {applyBufferData} from "./updates";
 import {generateBuffers} from "./buffers";
 
 
-
-export const usePhysicsBodies = () => {
+export const usePhysicsBodies = (removeBody: any) => {
 
     const [bodies] = useState<{
         [key: string]: any,
@@ -54,6 +53,9 @@ export const usePhysicsBodies = () => {
             delete bodies[uid]
             if (syncedUnsub) {
                 syncedUnsub()
+            }
+            if (removeBody) {
+                removeBody(body)
             }
         }
     }, [])
@@ -102,7 +104,7 @@ export const usePhysicsUpdate = () => {
 
 }
 
-export const usePhysics = () => {
+export const usePhysics = (removeBody: any = () => {}) => {
 
     const {
         addSyncedBody,
@@ -112,7 +114,7 @@ export const usePhysics = () => {
         syncedBodiesOrder,
         addBody,
         bodies,
-    } = usePhysicsBodies()
+    } = usePhysicsBodies(removeBody)
 
     const {
         onUpdate,

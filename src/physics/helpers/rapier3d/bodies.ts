@@ -19,6 +19,10 @@ const createCollider = (world: World, body: RigidBody, colliderDef: ColliderDef)
     world.createCollider(collider, body.handle)
 }
 
+export const removeBody = (world: World, body: RigidBody) => {
+    world.removeRigidBody(body)
+}
+
 export const createBody = (world: World, bodyDef: AddBodyDef) => {
 
     const rigidBodyDesc = new RigidBodyDesc(bodyDef.body.type);

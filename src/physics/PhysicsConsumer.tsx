@@ -5,6 +5,7 @@ import {Object3D} from "three";
 import {DEFAULT_STEP_RATE} from "./config";
 import {Context} from "./PhysicsConsumer.context";
 import {PhysicsConsumerSyncMeshes} from "../index";
+import {WorkerMessaging} from "../generic";
 
 export type DefaultPhysicsConsumerProps = {
     worker: Worker,
@@ -164,15 +165,17 @@ const PhysicsConsumer: React.FC<DefaultPhysicsConsumerProps & {
     if (!connected) return null
 
     return (
-        <Context.Provider value={{
-            subscribeToOnPhysicsUpdate,
-            syncBody,
-            syncMeshes,
-            sendMessage,
-        }}>
-            <PhysicsConsumerSyncMeshes useRAF/>
-            {children}
-        </Context.Provider>
+        <WorkerMessaging worker={worker}>
+            <Context.Provider value={{
+                subscribeToOnPhysicsUpdate,
+                syncBody,
+                syncMeshes,
+                sendMessage,
+            }}>
+                <PhysicsConsumerSyncMeshes useRAF/>
+                {children}
+            </Context.Provider>
+        </WorkerMessaging>
     );
 };
 
