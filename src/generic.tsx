@@ -1,6 +1,7 @@
 import React, {createContext, useCallback, useContext, useEffect, useRef, useState} from "react"
 import {generateUUID} from "./utils/ids";
 import {WorkerMessageData, WorkerMessageType} from "./physics/types";
+import {useHandleKeyEvents} from "./keys";
 
 enum MessageType {
     mounted = 'mounted',
@@ -111,6 +112,8 @@ export const WorkerMessaging: React.FC<{
             message,
         })
     }, [worker])
+
+    useHandleKeyEvents(worker)
 
     return (
         <Context.Provider value={{sendMessage, worker}}>

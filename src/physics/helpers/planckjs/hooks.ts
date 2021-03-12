@@ -5,11 +5,12 @@ import {usePhysicsConsumerContext} from "../../PhysicsConsumer.context";
 import {WorkerMessageType} from "../../types";
 import {Object3D} from "three";
 import {usePhysicsConsumerHelpers} from "./PhysicsConsumerHelpers";
+import {useFixedUpdateContext} from "../../PhysicsConsumer";
 
 export const useOnFixedUpdate = (callback: (delta: number) => void) => {
     const {
         subscribeToOnPhysicsUpdate
-    } = usePhysicsConsumerContext()
+    } = useFixedUpdateContext()
 
     const callbackRef = useRef(callback)
 

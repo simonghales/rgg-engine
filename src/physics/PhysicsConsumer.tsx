@@ -1,4 +1,13 @@
-import React, {MutableRefObject, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {
+    createContext,
+    MutableRefObject,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState
+} from "react";
 import {BodyData, WorkerMessageData, WorkerMessageType} from "./types";
 import {getNow} from "../utils/time";
 import {Object3D} from "three";
@@ -6,6 +15,7 @@ import {DEFAULT_STEP_RATE} from "./config";
 import {Context} from "./PhysicsConsumer.context";
 import {PhysicsConsumerSyncMeshes} from "../index";
 import {WorkerMessaging} from "../generic";
+import {useTransferKeyEvents} from "../keys";
 
 export type DefaultPhysicsConsumerProps = {
     worker: Worker,
@@ -13,10 +23,64 @@ export type DefaultPhysicsConsumerProps = {
     paused?: boolean,
 }
 
-const PhysicsConsumer: React.FC<DefaultPhysicsConsumerProps & {
+const FixedUpdateContext = createContext<{
+    onFixedUpdateSubscriptions: MutableRefObject<{
+        [key: string]: MutableRefObject<(delta: number) => void>,
+    }>,
+    subscribeToOnPhysicsUpdate: (callback: MutableRefObject<(delta: number) => void>) => () => void,
+    updateSubscriptions: (delta: number) => void,
+}>(null!)
+
+export const useFixedUpdateContext = () =>{
+    return useContext(FixedUpdateContext)
+}
+
+export const OnFixedUpdateProvider: React.FC = ({children}) => {
+
+    const localStateRef = useRef<{
+        subscriptionsIterator: number,
+    }>({
+        subscriptionsIterator: 0,
+    })
+
+    const onFixedUpdateSubscriptions = useRef<{
+        [key: string]: MutableRefObject<(delta: number) => void>,
+    }>({})
+
+    const {
+        subscribeToOnPhysicsUpdate,
+        updateSubscriptions,
+    } = useMemo(() => ({
+        subscribeToOnPhysicsUpdate: (callback: MutableRefObject<(delta: number) => void>) => {
+            const id = localStateRef.current.subscriptionsIterator.toString()
+            localStateRef.current.subscriptionsIterator += 1
+            onFixedUpdateSubscriptions.current[id] = callback
+            return () => {
+                delete onFixedUpdateSubscriptions.current[id]
+            }
+        },
+        updateSubscriptions: (delta: number) => {
+            Object.values(onFixedUpdateSubscriptions.current).forEach(callback => callback.current(delta))
+        }
+    }), [])
+
+    return (
+        <FixedUpdateContext.Provider value={{
+            onFixedUpdateSubscriptions,
+            subscribeToOnPhysicsUpdate,
+            updateSubscriptions,
+        }}>
+            {children}
+        </FixedUpdateContext.Provider>
+    )
+}
+
+type Props = DefaultPhysicsConsumerProps & {
     lerpBody: (body: BodyData, object: Object3D, stepRate: number) => void,
     updateBodyData: (bodyData: BodyData, positions: Float32Array, angles: Float32Array) => void,
-}> = ({
+}
+
+const PhysicsConsumer: React.FC<Props> = ({
             paused = false,
           updateBodyData,
           worker,
@@ -37,9 +101,11 @@ const PhysicsConsumer: React.FC<DefaultPhysicsConsumerProps & {
         subscriptionsIterator: 0,
         bodies: []
     })
-    const onFixedUpdateSubscriptions = useRef<{
-        [key: string]: MutableRefObject<(delta: number) => void>,
-    }>({})
+
+    const {
+        updateSubscriptions,
+    } = useFixedUpdateContext()
+
     const onFrameCallbacks = useRef<{
         [id: string]: () => void,
     }>({})
@@ -69,9 +135,9 @@ const PhysicsConsumer: React.FC<DefaultPhysicsConsumerProps & {
         const now = updateTime
         const delta = (now - localStateRef.current.lastUpdate) / 1000
         localStateRef.current.lastUpdate = now
-        Object.values(onFixedUpdateSubscriptions.current).forEach(callback => callback.current(delta))
+        updateSubscriptions(delta)
 
-    }, [])
+    }, [updateSubscriptions])
 
     useEffect(() => {
         if (connected) return
@@ -125,17 +191,8 @@ const PhysicsConsumer: React.FC<DefaultPhysicsConsumerProps & {
     }, [])
 
     const {
-        subscribeToOnPhysicsUpdate,
         syncBody,
     } = useMemo(() => ({
-        subscribeToOnPhysicsUpdate: (callback: MutableRefObject<(delta: number) => void>) => {
-            const id = localStateRef.current.subscriptionsIterator.toString()
-            localStateRef.current.subscriptionsIterator += 1
-            onFixedUpdateSubscriptions.current[id] = callback
-            return () => {
-                delete onFixedUpdateSubscriptions.current[id]
-            }
-        },
         syncBody: (id: string, ref: MutableRefObject<Object3D>) => {
             localStateRef.current.subscriptionsIterator += 1
             const body = {
@@ -162,12 +219,13 @@ const PhysicsConsumer: React.FC<DefaultPhysicsConsumerProps & {
         worker.postMessage(message)
     }, [])
 
+    useTransferKeyEvents(worker)
+
     if (!connected) return null
 
     return (
         <WorkerMessaging worker={worker}>
             <Context.Provider value={{
-                subscribeToOnPhysicsUpdate,
                 syncBody,
                 syncMeshes,
                 sendMessage,
@@ -179,4 +237,12 @@ const PhysicsConsumer: React.FC<DefaultPhysicsConsumerProps & {
     );
 };
 
-export default PhysicsConsumer;
+const Wrapper: React.FC<Props> = (props) => {
+    return (
+        <OnFixedUpdateProvider>
+            <PhysicsConsumer {...props}/>
+        </OnFixedUpdateProvider>
+    )
+}
+
+export default Wrapper;
