@@ -13,6 +13,21 @@ const createColliderDesc = (colliderDef: ColliderDef): ColliderDesc | null => {
     return null
 }
 
+// const getCollisionGroups = (myGroups: number[], interactGroups: number[]) => {
+//     let result = 0;
+//     for (let g of myGroups)
+//     {
+//         result += (1 << g);
+//     }
+//     result = result << 16;
+//
+//     for (let f of interactGroups)
+//     {
+//         result += (1 << f);
+//     }
+//     return result;
+// }
+
 const createCollider = (world: World, body: RigidBody, colliderDef: ColliderDef) => {
     const collider = createColliderDesc(colliderDef)
     if (!collider) return
