@@ -12,6 +12,7 @@ export type ApplyBufferDataFn = (
     }, syncedBodiesOrder: string[]) => void
 
 export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => {
+
     const {
         position,
         angle,
@@ -19,7 +20,9 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         previous,
     } = body
 
-    if (!position || !angle) return
+    if (!position || angle == undefined) {
+        return
+    }
 
     if (!previous.position || !previous.angle) {
         object.position.x = position[0]

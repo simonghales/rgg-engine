@@ -1,5 +1,5 @@
 {
-  "version": "0.4.4",
+  "version": "0.4.5-beta.2",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -26,7 +26,8 @@
     "planck-js": ">=0.3",
     "react": ">=16",
     "react-three-fiber": ">=5.0",
-    "three": "^0.124.0"
+    "three": "^0.124.0",
+    "zustand": ">=^3.3.3"
   },
   "husky": {
     "hooks": {
@@ -68,7 +69,8 @@
     "three": "^0.124.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
-    "typescript": "^4.1.5"
+    "typescript": "^4.1.5",
+    "zustand": "^3.3.3"
   },
   "dependencies": {
     "react-nil": "^0.0.3",

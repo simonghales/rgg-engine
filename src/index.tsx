@@ -17,6 +17,7 @@ import { useRapier3DBody } from './physics/helpers/rapier3d/hooks';
 import { createBody } from './physics/helpers/rapier3d/bodies';
 import { AddBodyDef } from './physics/helpers/rapier3d/types';
 import {SyncComponents, SyncedComponent } from './generic';
+import {rawActiveKeys, useActiveKeys } from './keys';
 
 export {
   createWorkerApp,
@@ -42,4 +43,6 @@ export {
   useSyncBody,
   SyncedComponent,
   SyncComponents,
+  useActiveKeys,
+  rawActiveKeys
 }

@@ -3,6 +3,7 @@ import {Context} from "./PhysicsProvider.context";
 import {OnWorldStepFn} from "./types";
 import {createNewPhysicsLoopWebWorker} from "./physicsLoopWorker";
 import {getNow} from "../utils/time";
+import {useFixedUpdateContext} from "./PhysicsConsumer";
 
 let now = 0
 let delta = 0
@@ -14,6 +15,10 @@ const usePhysicsWorldStepHandler = (onWorldStep: OnWorldStepFn, stepRate: number
     })
 
     const {
+        updateSubscriptions
+    } = useFixedUpdateContext()
+
+    const {
         stepWorld
     } = useMemo(() => ({
         stepWorld: () => {
@@ -22,8 +27,9 @@ const usePhysicsWorldStepHandler = (onWorldStep: OnWorldStepFn, stepRate: number
             localStateRef.current.lastUpdate = now
             if (paused) return
             onWorldStep(delta)
+            updateSubscriptions(delta)
         }
-    }), [paused, onWorldStep])
+    }), [paused, onWorldStep, updateSubscriptions])
 
     const stepWorldRef = useRef(stepWorld)
 

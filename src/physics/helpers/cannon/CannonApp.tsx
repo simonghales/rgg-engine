@@ -2,6 +2,7 @@ import { World } from "cannon-es"
 import React, {useEffect, useState} from "react"
 import CannonPhysicsHandler from "./CannonPhysicsHandler";
 import {DEFAULT_STEP_RATE} from "../../config";
+import {WorkerMessaging} from "../../../generic";
 
 const useCannonPhysics = () => {
 
@@ -44,9 +45,11 @@ const CannonApp: React.FC<{
     if (!world) return null
 
     return (
-        <CannonPhysicsHandler world={world} worker={worker} stepRate={stepRate} maxNumberOfSyncedBodies={maxNumberOfSyncedBodies}>
-            {children}
-        </CannonPhysicsHandler>
+        <WorkerMessaging worker={worker}>
+            <CannonPhysicsHandler world={world} worker={worker} stepRate={stepRate} maxNumberOfSyncedBodies={maxNumberOfSyncedBodies}>
+                {children}
+            </CannonPhysicsHandler>
+        </WorkerMessaging>
     )
 }
 

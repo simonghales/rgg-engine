@@ -56,6 +56,8 @@ const WorkerSubscription: React.FC<{
 
         worker.postMessage(message, [positions.buffer, angles.buffer])
 
+        // process local fixed updates
+
     }, [getPendingSyncedBodiesIteration, syncedBodies, syncedBodiesOrder])
 
     const updateWorkerRef = useRef(updateWorker)
