@@ -2,6 +2,7 @@ import React, { useEffect, useState} from "react";
 import {World} from "planck-js";
 import {DEFAULT_STEP_RATE} from "../../config";
 import PlanckPhysicsHandler from "./PlanckPhysicsHandler";
+import {WorkerMessaging} from "../../../generic";
 
 const usePlanckPhysics = () => {
 
@@ -31,9 +32,11 @@ const PlanckApp: React.FC<{
     if (!world) return null
 
     return (
-        <PlanckPhysicsHandler world={world} worker={worker} stepRate={stepRate} maxNumberOfSyncedBodies={maxNumberOfSyncedBodies}>
-            {children}
-        </PlanckPhysicsHandler>
+        <WorkerMessaging worker={worker}>
+            <PlanckPhysicsHandler world={world} worker={worker} stepRate={stepRate} maxNumberOfSyncedBodies={maxNumberOfSyncedBodies}>
+                {children}
+            </PlanckPhysicsHandler>
+        </WorkerMessaging>
     );
 };
 
