@@ -27,7 +27,7 @@ const usePhysicsWorldStepHandler = (onWorldStep: OnWorldStepFn, stepRate: number
             localStateRef.current.lastUpdate = now
             if (paused) return
             onWorldStep(delta)
-            updateSubscriptions(delta)
+            updateSubscriptions(delta / 1000)
         }
     }), [paused, onWorldStep, updateSubscriptions])
 

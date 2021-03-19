@@ -26,8 +26,8 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
 
     if (!previous.position || !previous.angle) {
         object.position.x = position[0]
-        object.position.y = position[1]
-        object.rotation.z = angle as number
+        object.position.z = position[1]
+        object.rotation.y = angle as number
         return
     }
 
