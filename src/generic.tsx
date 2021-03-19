@@ -23,7 +23,7 @@ const useSyncComponent = (type: string, id: string, props: any, sendMessage: any
             message: MessageType.mounted,
             id,
             type,
-            props,
+            value: props,
         })
         return () => {
             sendMessage({
