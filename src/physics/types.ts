@@ -32,4 +32,5 @@ export type BodyData = {
     },
     lastUpdate: number,
     lastRender: number,
+    applyRotation?: boolean,
 }

@@ -193,14 +193,15 @@ const PhysicsConsumer: React.FC<Props> = ({
     const {
         syncBody,
     } = useMemo(() => ({
-        syncBody: (id: string, ref: MutableRefObject<Object3D>) => {
+        syncBody: (id: string, ref: MutableRefObject<Object3D>, applyRotation: boolean = true) => {
             localStateRef.current.subscriptionsIterator += 1
-            const body = {
+            const body: BodyData = {
                 ref,
                 index: localStateRef.current.bodies.indexOf(id),
                 lastUpdate: getNow(),
                 lastRender: getNow(),
                 previous: {},
+                applyRotation,
             }
             bodiesData[id] = body
             onFrameCallbacks.current[id] = () => lerpMesh(body, ref)
