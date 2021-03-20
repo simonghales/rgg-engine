@@ -2,7 +2,7 @@ import {createContext, MutableRefObject, useContext} from "react";
 import {Object3D} from "three";
 
 type State = {
-    syncBody: (id: string, ref: MutableRefObject<Object3D>) => () => void,
+    syncBody: (id: string, ref: MutableRefObject<Object3D>, applyRotation?: boolean) => () => void,
     syncMeshes: () => void,
     sendMessage: (message: any) => void,
 }

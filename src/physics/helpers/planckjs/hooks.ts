@@ -48,12 +48,12 @@ export type Options = {
     ref?: MutableRefObject<Object3D>,
 }
 
-export const useSyncBody = (id: string, ref: MutableRefObject<Object3D> | undefined, options: {
+export const useSyncBody = (id: string, ref: MutableRefObject<Object3D> | undefined, options?: {
     applyRotation?: boolean,
 }) => {
     const {
         applyRotation = true
-    } = options
+    } = options ?? {}
     const {
         syncBody
     } = usePhysicsConsumerContext()
