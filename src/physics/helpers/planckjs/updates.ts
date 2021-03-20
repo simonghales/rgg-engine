@@ -127,7 +127,7 @@ export const applyBufferData = (
 export const prepareObject = (object: Object3D, props: AddBodyDef) => {
     if (props.body.position) {
         object.position.x = props.body.position.x
-        object.position.y = props.body.position.y
+        object.position.z = props.body.position.y
     }
     if (props.body.angle) {
         object.rotation.z = props.body.angle
