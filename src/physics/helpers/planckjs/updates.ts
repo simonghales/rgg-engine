@@ -9,7 +9,9 @@ export type ApplyBufferDataFn = (
     buffers: Buffers,
     syncedBodies: {
         [key: string]: any,
-    }, syncedBodiesOrder: string[]) => void
+    },
+    syncedBodiesOrder: string[]
+) => void
 
 export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => {
 
@@ -18,6 +20,7 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         angle,
         lastUpdate,
         previous,
+        applyRotation = true,
     } = body
 
     if (!position || angle == undefined) {
@@ -27,7 +30,9 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
     if (!previous.position || !previous.angle) {
         object.position.x = position[0]
         object.position.z = position[1]
-        object.rotation.y = angle as number
+        if (applyRotation) {
+            object.rotation.z = angle as number
+        }
         return
     }
 
@@ -56,7 +61,9 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         physicsRemainingRatio
     );
 
-    object.rotation.z = angle as number; // todo - lerp
+    if (applyRotation) {
+        object.rotation.z = angle as number; // todo - lerp
+    }
 }
 
 const getPositionAndAngle = (
