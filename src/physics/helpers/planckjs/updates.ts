@@ -48,8 +48,6 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
 
     normalised = normalised < 0 ? 0 : normalised > 1 ? 1 : normalised
 
-    // console.log(normalised)
-
     const physicsRemainingRatio = normalised
 
     object.position.x = lerp(
