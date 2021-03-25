@@ -27,7 +27,7 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         return
     }
 
-    if (!previous.position || !previous.angle) {
+    if (previous.position == undefined || (applyRotation && previous.angle == undefined)) {
         object.position.x = position[0]
         object.position.z = position[1]
         if (applyRotation) {
@@ -129,7 +129,7 @@ export const prepareObject = (object: Object3D, props: AddBodyDef) => {
         object.position.x = props.body.position.x
         object.position.z = props.body.position.y
     }
-    if (props.body.angle) {
+    if (props.body.angle != null) {
         object.rotation.z = props.body.angle
     }
 }
