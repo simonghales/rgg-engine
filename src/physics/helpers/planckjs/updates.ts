@@ -13,10 +13,6 @@ export type ApplyBufferDataFn = (
     syncedBodiesOrder: string[]
 ) => void
 
-const normalizeBetweenTwoRanges = (val: number, minVal: number, maxVal: number, newMin: number, newMax: number) => {
-    return newMin + (val - minVal) * (newMax - newMin) / (maxVal - minVal);
-};
-
 export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => {
 
     const {
@@ -31,8 +27,7 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         return
     }
 
-    if (!previous.position || previous.angle === undefined || previous.angle === null) {
-    // if (!previous.position || !previous.angle) {
+    if (!previous.position || previous.angle == undefined) {
         object.position.x = position[0]
         object.position.z = position[1]
         if (applyRotation) {
@@ -43,16 +38,17 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
 
     const now = getNow()
 
-    const nextExpectedUpdate = lastUpdate + stepRate + 2
+    const step = stepRate + 2
+    const nextExpectedUpdate = lastUpdate + step
 
-    const min = lastUpdate
-    const max = nextExpectedUpdate
+    const timeRemaining = nextExpectedUpdate - now
+    let physicsRemainingRatio = timeRemaining / step
 
-    let normalised = normalizeBetweenTwoRanges(now, min, max, 0, 1)
+    if (physicsRemainingRatio < 0) {
+        physicsRemainingRatio = 0
+    }
 
-    normalised = normalised < 0 ? 0 : normalised > 1 ? 1 : normalised
-
-    const physicsRemainingRatio = normalised
+    physicsRemainingRatio = 1 - physicsRemainingRatio
 
     object.position.x = lerp(
         previous.position[0],

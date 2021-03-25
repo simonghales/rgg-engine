@@ -44,7 +44,7 @@ const WorkerApp: React.FC<{
     worker: Worker
 }> = ({worker}) => {
     return (
-        <Rapier3DApp worker={worker} stepRate={STEP_RATE}/>
+        <PlanckApp worker={worker} stepRate={STEP_RATE}/>
     )
 };
 

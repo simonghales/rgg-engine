@@ -116,7 +116,9 @@ const PhysicsConsumer: React.FC<Props> = ({
         lerpBody(body, object, stepRate)
     }, [])
 
-    const onUpdate = useCallback((updateTime: number, positions: Float32Array, angles: Float32Array, bodies: undefined | string[]) => {
+    const onUpdate = useCallback((_updateTime: number, positions: Float32Array, angles: Float32Array, bodies: undefined | string[]) => {
+
+        const now = getNow()
 
         if (bodies) {
             localStateRef.current.bodies = bodies
@@ -128,11 +130,12 @@ const PhysicsConsumer: React.FC<Props> = ({
             }
             if (bodyData.index >= 0) {
                 updateBodyData(bodyData, positions, angles)
-                bodyData.lastUpdate = updateTime
+                bodyData.lastUpdate = now
+                // console.log('lastUpdate', updateTime, getNow())
             }
         })
 
-        const now = updateTime
+        // const now = updateTime
         const delta = (now - localStateRef.current.lastUpdate) / 1000
         localStateRef.current.lastUpdate = now
         updateSubscriptions(delta)

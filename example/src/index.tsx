@@ -2,7 +2,7 @@ import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Canvas} from "react-three-fiber";
-import {Rapier3DPhysicsConsumer} from "../../src";
+import {PlanckPhysicsConsumer, Rapier3DPhysicsConsumer} from "../../src";
 import "./index.css"
 import {STEP_RATE} from "./config";
 import Rapier3DGame from "./Rapier3DGame";
@@ -22,9 +22,11 @@ const App = () => {
 
   return (
     <Canvas>
-        <Rapier3DPhysicsConsumer worker={worker} stepRate={STEP_RATE} paused={paused}>
-            <Rapier3DGame/>
-        </Rapier3DPhysicsConsumer>
+        <PlanckPhysicsConsumer worker={worker} stepRate={STEP_RATE} paused={false}>
+            {/*<Rapier3DPhysicsConsumer worker={worker} stepRate={STEP_RATE} paused={paused}>*/}
+                <Rapier3DGame/>
+            {/*</Rapier3DPhysicsConsumer>*/}
+        </PlanckPhysicsConsumer>
     </Canvas>
   );
 };
