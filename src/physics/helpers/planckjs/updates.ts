@@ -27,18 +27,19 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         return
     }
 
-    if (!previous.position || !previous.angle) {
+    if (!previous.position || previous.angle === undefined || previous.angle === null) {
+    // if (!previous.position || !previous.angle) {
         object.position.x = position[0]
         object.position.z = position[1]
         if (applyRotation) {
-            object.rotation.z = angle as number
+            object.rotation.y = angle as number
         }
         return
     }
 
     const now = getNow()
 
-    const nextExpectedUpdate = lastUpdate + stepRate + 1
+    const nextExpectedUpdate = lastUpdate + stepRate + 2
 
     const min = lastUpdate
     const max = nextExpectedUpdate
@@ -46,6 +47,8 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
     let normalised = ((now - min) / (max - min))
 
     normalised = normalised < 0 ? 0 : normalised > 1 ? 1 : normalised
+
+    // console.log(normalised)
 
     const physicsRemainingRatio = normalised
 
@@ -55,14 +58,14 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         physicsRemainingRatio
     );
 
-    object.position.y = lerp(
+    object.position.z = lerp(
         previous.position[1],
         position[1],
         physicsRemainingRatio
     );
 
     if (applyRotation) {
-        object.rotation.z = angle as number; // todo - lerp
+        object.rotation.y = angle as number; // todo - lerp
     }
 }
 
@@ -130,6 +133,6 @@ export const prepareObject = (object: Object3D, props: AddBodyDef) => {
         object.position.z = props.body.position.y
     }
     if (props.body.angle) {
-        object.rotation.z = props.body.angle
+        object.rotation.y = props.body.angle
     }
 }
