@@ -13,6 +13,10 @@ export type ApplyBufferDataFn = (
     syncedBodiesOrder: string[]
 ) => void
 
+const normalizeBetweenTwoRanges = (val: number, minVal: number, maxVal: number, newMin: number, newMax: number) => {
+    return newMin + (val - minVal) * (newMax - newMin) / (maxVal - minVal);
+};
+
 export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => {
 
     const {
@@ -44,7 +48,7 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
     const min = lastUpdate
     const max = nextExpectedUpdate
 
-    let normalised = ((now - min) / (max - min))
+    let normalised = normalizeBetweenTwoRanges(now, min, max, 0, 1)
 
     normalised = normalised < 0 ? 0 : normalised > 1 ? 1 : normalised
 
