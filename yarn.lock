@@ -808,9 +808,9 @@
     regenerator-runtime "^0.13.4"
 
 "@babel/runtime@^7.13.10":
-  version "7.13.10"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.13.10.tgz#47d42a57b6095f4468da440388fdbad8bebf0d7d"
-  integrity sha512-4QPkjJq6Ns3V/RgpEahRk+AGfL0eO6RHHtTWoNNr5mO49G6B5+X6d6THgWEAvTrznU5xYpbAlVKRYcsCgh/Akw==
+  version "7.14.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.0.tgz#46794bc20b612c5f75e62dd071e24dfd95f1cbe6"
+  integrity sha512-JELkvo/DlpNdJ7dlyw/eY7E0suy5i5GQH+Vlxaq1nsNJ+H7f4Vtv3jMeCEgRhZZQFXTjldYfQgv2qmM6M1v5wA==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -1080,10 +1080,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.11.tgz#aeb16f50649a91af79dbe36574b66d0f9e4d9f71"
   integrity sha512-3NsZsJIA/22P3QUyrEDNA2D133H4j224twJrdipXN38dpnIOzAbUDtOwkcJ5pXmn75w7LSQDjA4tO9dm1XlqlA==
 
-"@react-three/fiber@^6.0.5":
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/@react-three/fiber/-/fiber-6.0.5.tgz#9f48977f1e4fc23d5a31e7c21615a3f00a1858cc"
-  integrity sha512-A7yiKB52ksMoiAgzoEZTICUHsuagiUzbVWnhrASG3tp54rXivV63Dc9iJ+mskI9OIZlMhHFf6IM1Em4E808HVw==
+"@react-three/fiber@^6.0.21":
+  version "6.0.21"
+  resolved "https://registry.yarnpkg.com/@react-three/fiber/-/fiber-6.0.21.tgz#f1936eb046a504f46a098273b925c7a8fb6fb79a"
+  integrity sha512-EH3Dzkm617k2ZxmHdw8dlNPeCYaoFTdlL8zl0zF/5z6Mwzxm7Pa/M6teg+dM9+19E4HIxCmIfI2VnTYETbAhXg==
   dependencies:
     "@babel/runtime" "^7.13.10"
     react-merge-refs "^1.1.0"
@@ -1094,7 +1094,7 @@
     scheduler "^0.20.2"
     use-asset "^1.0.4"
     utility-types "^3.10.0"
-    zustand "^3.3.3"
+    zustand "^3.5.1"
 
 "@rollup/plugin-babel@^5.1.0":
   version "5.3.0"
@@ -1341,6 +1341,11 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
+
+"@types/three@^0.127.0":
+  version "0.127.1"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.127.1.tgz#0978054e5daa6485946a3f1518a76412186ae81f"
+  integrity sha512-e90iYq3zde3axANg7BPZY0fKrez1AzveamIIFk23PMh9WtCx91geokDy+yEAIymdIldgUpvezAP6+zCV3oekXw==
 
 "@types/yargs-parser@*":
   version "20.2.0"
@@ -8960,3 +8965,8 @@ zustand@^3.3.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.3.3.tgz#88b930a873d0f13e406f96958c1409645ea8b370"
   integrity sha512-KTN/O76rVc9muDoprsCDe/LQjbuq+GHYt5JdYahuXaGZ+8Gyk44SepzTFeQTF5J+b8+/Q+o90BaSEQ3WImKPog==
+
+zustand@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.5.1.tgz#28970280e830924b185ce064061231957398c1d0"
+  integrity sha512-7J56Ve814z4zap71iaKFD+t65LFI//jEq/Vf55BTSVqJZCm+w9rov8OMBg+YSwIPQk54bfoIWHTrOWuAbpEDMw==
