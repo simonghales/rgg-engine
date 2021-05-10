@@ -27,6 +27,7 @@
     "react": ">=16",
     "@react-three/fiber": ">=6.0.5",
     "three": ">=0.127.0",
+    "@types/three": ">=0.127.0",
     "zustand": ">=^3.3.3"
   },
   "husky": {
