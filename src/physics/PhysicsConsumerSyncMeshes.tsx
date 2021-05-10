@@ -1,5 +1,5 @@
 import React, {useEffect} from "react"
-import {useFrame} from "react-three-fiber";
+import {useFrame} from "@react-three/fiber";
 import {usePhysicsConsumerContext} from "./PhysicsConsumer.context";
 
 const RAFSync: React.FC = () => {

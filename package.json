@@ -1,5 +1,5 @@
 {
-  "version": "0.4.12",
+  "version": "0.4.13-alpha.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -25,8 +25,8 @@
     "cannon-es": ">=0.16",
     "planck-js": ">=0.3",
     "react": ">=16",
-    "react-three-fiber": ">=5.0",
-    "three": "^0.124.0",
+    "@react-three/fiber": ">=6.0.5",
+    "three": ">=0.127.0",
     "zustand": ">=^3.3.3"
   },
   "husky": {
@@ -64,9 +64,8 @@
     "planck-js": "^0.3.26",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-three-fiber": "^5.3.18",
     "size-limit": "^4.9.2",
-    "three": "^0.124.0",
+    "three": "^0.127.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^4.1.5",

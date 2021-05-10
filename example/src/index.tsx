@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {Canvas} from "react-three-fiber";
+import {Canvas} from "@react-three/fiber";
 import {PlanckPhysicsConsumer, Rapier3DPhysicsConsumer} from "../../src";
 import "./index.css"
 import {STEP_RATE} from "./config";
