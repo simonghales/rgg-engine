@@ -16,7 +16,7 @@ const IntervalSync: React.FC = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            syncMeshes()
+            syncMeshes(null, 1000 / 30)
         }, 1000 / 30)
         return () => {
             clearInterval(interval)
