@@ -41,6 +41,11 @@ export const useBodyApi = (id: string) => {
 
 }
 
+export const useBodyProxy = (id: string) => {
+    const {bodiesData} = usePhysicsConsumerContext();
+    return bodiesData[id] || {};
+}
+
 export type Options = {
     id?: string,
     synced?: boolean,

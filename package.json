@@ -1,5 +1,5 @@
 {
-  "version": "0.4.13-alpha.1",
+  "version": "0.4.13-alpha.2",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -75,6 +75,7 @@
   },
   "dependencies": {
     "react-nil": "^0.0.3",
-    "shapes": "^0.4.0"
+    "shapes": "^0.4.0",
+    "valtio": "^1.0.6"
   }
 }

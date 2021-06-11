@@ -30,6 +30,7 @@ export type BodyData = {
         position?: [number, number] | [number, number, number],
         angle?: number | [number, number, number, number],
     },
+    velocity?: [number, number] | [number, number, number],
     lastUpdate: number,
     lastRender: number,
     applyRotation?: boolean,

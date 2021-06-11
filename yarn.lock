@@ -6831,6 +6831,11 @@ prop-types@^15.7.2:
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
+proxy-compare@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/proxy-compare/-/proxy-compare-2.0.0.tgz#36f41114a25fcf359037308d12529183a9dc182c"
+  integrity sha512-xhJF1+vPCnu93QYva3Weii5ho1AeX5dsR/P5O7pzy9QLxeOgMSQNC8zDo0bGg9vtn61Pu5Qn+5w/Y8OSU5k+8g==
+
 prr@~1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/prr/-/prr-1.0.1.tgz#d3fc114ba06995a45ec6893f484ceb1d78f5f476"
@@ -8680,6 +8685,13 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+valtio@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/valtio/-/valtio-1.0.6.tgz#b316deea5537d254a141e2e5af1692d9eae2f60f"
+  integrity sha512-ylCis9IkcE7b92XjMb3ebdJgLvJEFJ2NjfuD01QNr98pVOhRa5WsW4LSykFgbO4W7ftrZtO8jN4svZL0XlD77w==
+  dependencies:
+    proxy-compare "2.0.0"
 
 vendors@^1.0.0:
   version "1.0.4"

@@ -5,7 +5,7 @@ import PhysicsConsumer from './physics/PhysicsConsumer';
 import PhysicsConsumerSyncMeshes from './physics/PhysicsConsumerSyncMeshes';
 import { usePhysicsConsumerContext } from './physics/PhysicsConsumer.context';
 import { usePlanckAppContext } from './physics/helpers/planckjs/PlanckApp.context';
-import { usePlanckBody, useBodyApi, useOnFixedUpdate, useSyncBody } from './physics/helpers/planckjs/hooks';
+import { usePlanckBody, useBodyApi, useOnFixedUpdate, useSyncBody, useBodyProxy } from './physics/helpers/planckjs/hooks';
 import { FixtureShape } from './physics/helpers/planckjs/types';
 import CannonApp from './physics/helpers/cannon/CannonApp';
 import PlanckPhysicsConsumer from './physics/helpers/planckjs/PlanckPhysicsConsumer';
@@ -44,5 +44,6 @@ export {
   SyncedComponent,
   SyncComponents,
   useActiveKeys,
-  rawActiveKeys
+  rawActiveKeys,
+  useBodyProxy,
 }

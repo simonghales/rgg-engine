@@ -3,13 +3,13 @@ import {usePlanckPhysicsHandlerContext} from "./PlanckPhysicsHandler.context";
 import {getNow} from "../../../utils/time";
 import {WorkerMessageData, WorkerMessageType} from "../../types";
 import {ApplyBufferDataFn} from "./updates";
-import {Buffers} from "./types";
+import {ExtBuffers} from "./types";
 
 const WorkerSubscription: React.FC<{
     worker: Worker,
     subscribe: (callback: () => void) => () => void,
     applyBufferData: ApplyBufferDataFn,
-    generateBuffers: (maxNumberOfSyncedBodies: number) => Buffers,
+    generateBuffers: (maxNumberOfSyncedBodies: number) => ExtBuffers,
     setPaused?: (paused: boolean) => void,
 }> = ({worker, subscribe, applyBufferData, generateBuffers, setPaused}) => {
 
@@ -40,6 +40,7 @@ const WorkerSubscription: React.FC<{
         const {
             positions,
             angles,
+            velocities,
         } = buffers
 
         const message: any = {
@@ -47,6 +48,7 @@ const WorkerSubscription: React.FC<{
             updateTime: getNow(),
             positions: positions,
             angles: angles,
+            velocities: velocities,
         }
 
         if (shouldSyncBodies) {
@@ -54,7 +56,7 @@ const WorkerSubscription: React.FC<{
             localStateRef.current.bodiesIteration = bodiesIteration
         }
 
-        worker.postMessage(message, [positions.buffer, angles.buffer])
+        worker.postMessage(message, [positions.buffer, angles.buffer, velocities.buffer])
 
         // process local fixed updates
 
@@ -99,6 +101,7 @@ const WorkerSubscription: React.FC<{
                 case WorkerMessageType.PHYSICS_PROCESSED:
                     buffers.positions = message.positions
                     buffers.angles = message.angles
+                    buffers.velocities = message.velocities
                     setBuffersAvailable(true)
                     break;
                 case WorkerMessageType.PHYSICS_SET_PAUSED:
