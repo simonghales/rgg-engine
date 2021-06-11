@@ -76,8 +76,8 @@ export const OnFixedUpdateProvider: React.FC = ({children}) => {
 }
 
 type Props = DefaultPhysicsConsumerProps & {
-    lerpBody: (body: BodyData, object: Object3D) => void,
-    updateBodyData: (bodyData: BodyData, positions: Float32Array, angles: Float32Array, velocities?: Float32Array) => void,
+    lerpBody: (body: BodyData, object: Object3D, delta: number) => void,
+    updateBodyData: (bodyData: BodyData, positions: Float32Array, angles: Float32Array, velocities: Float32Array) => void,
 }
 
 const PhysicsConsumer: React.FC<Props> = ({
@@ -108,16 +108,16 @@ const PhysicsConsumer: React.FC<Props> = ({
     } = useFixedUpdateContext()
 
     const onFrameCallbacks = useRef<{
-        [id: string]: () => void,
+        [id: string]: (delta: number) => void,
     }>({})
 
-    const lerpMesh = useCallback((body: BodyData, ref: MutableRefObject<Object3D>) => {
+    const lerpMesh = useCallback((body: BodyData, ref: MutableRefObject<Object3D>, delta: number) => {
         if (!ref.current) return
         const object = ref.current
-        lerpBody(body, object)
+        lerpBody(body, object, delta)
     }, [])
 
-    const onUpdate = useCallback((_updateTime: number, positions: Float32Array, angles: Float32Array, bodies: undefined | string[], velocities?: Float32Array) => {
+    const onUpdate = useCallback((_updateTime: number, positions: Float32Array, angles: Float32Array, bodies: undefined | string[], velocities: Float32Array) => {
 
         const now = getNow()
 
@@ -210,7 +210,7 @@ const PhysicsConsumer: React.FC<Props> = ({
                 applyRotation,
             }
             bodiesData[id] = body
-            onFrameCallbacks.current[id] = () => lerpMesh(body, ref)
+            onFrameCallbacks.current[id] = (delta: number) => lerpMesh(body, ref, delta)
             return () => {
                 delete onFrameCallbacks.current[id]
                 delete bodiesData[id]
@@ -218,8 +218,8 @@ const PhysicsConsumer: React.FC<Props> = ({
         }
     }), [])
 
-    const syncMeshes = useCallback(() => {
-        Object.values(onFrameCallbacks.current).forEach(callback => callback())
+    const syncMeshes = useCallback((_, delta: number) => {
+        Object.values(onFrameCallbacks.current).forEach(callback => callback(delta))
     }, [])
 
     const sendMessage = useCallback((message: any) => {

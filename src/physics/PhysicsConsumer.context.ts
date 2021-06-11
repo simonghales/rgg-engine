@@ -4,7 +4,7 @@ import {BodyData} from './types';
 
 type State = {
     syncBody: (id: string, ref: MutableRefObject<Object3D>, applyRotation?: boolean) => () => void,
-    syncMeshes: () => void,
+    syncMeshes: (_: any, delta: number) => void,
     sendMessage: (message: any) => void,
     bodiesData: { [id: string]: BodyData },
 }

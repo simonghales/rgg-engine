@@ -13,8 +13,8 @@ export type ApplyBufferDataFn = (
     syncedBodiesOrder: string[]
 ) => void
 
-export const lerpBody = (body: BodyData, object: Object3D, /* stepRate: number */) => {
-
+export const lerpBody = (body: BodyData, object: Object3D, delta: number /* stepRate: number */) => {
+    
     // const maxLerp: number = 1;
 
     const {
@@ -57,13 +57,13 @@ export const lerpBody = (body: BodyData, object: Object3D, /* stepRate: number *
     object.position.x = lerp(
         object.position.x,
         position[0],
-        0.5,
+        (0 / delta) + 0.5,
     );
 
     object.position.z = lerp(
         object.position.z,
         position[1],
-        0.5,
+        (0 / delta) + 0.5,
     );
 
     if (applyRotation) {
