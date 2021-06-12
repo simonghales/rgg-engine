@@ -2,7 +2,7 @@ import React, {useCallback, useMemo, useState} from "react"
 import {World} from "@dimforge/rapier3d-compat/rapier.js";
 import {usePhysics} from "../planckjs/PlanckPhysicsHandler";
 import {Context} from "../planckjs/PlanckPhysicsHandler.context";
-import WorkerSubscription from "../planckjs/WorkerSubscription";
+import WorkerSubscription from "./WorkerSubscription";
 import {generateBuffers} from "../cannon/buffers";
 import {Context as AppContext} from "../planckjs/PlanckApp.context";
 import Physics from "../../Physics";
