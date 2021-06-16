@@ -57,13 +57,13 @@ export const lerpBody = (body: BodyData, object: Object3D, delta: number /* step
     object.position.x = lerp(
         object.position.x,
         position[0],
-        (0 / delta) + 0.5,
+        1 - 0.0000000000000000005 ** delta,
     );
 
     object.position.z = lerp(
         object.position.z,
         position[1],
-        (0 / delta) + 0.5,
+        1 - 0.0000000000000000005 ** delta,
     );
 
     if (applyRotation) {
