@@ -119,6 +119,8 @@ const PhysicsConsumer: React.FC<Props> = ({
 
     const onUpdate = useCallback((_updateTime: number, positions: Float32Array, angles: Float32Array, bodies: undefined | string[], velocities: Float32Array) => {
 
+        if (!updateSubscriptions) return;
+
         const now = getNow()
 
         if (bodies) {
@@ -143,17 +145,18 @@ const PhysicsConsumer: React.FC<Props> = ({
 
     }, [updateSubscriptions])
 
+    const onUpdateRef = useRef(onUpdate);
+
+    useEffect(() => {
+        onUpdateRef.current = onUpdate;
+    }, [onUpdate]);
+
     useEffect(() => {
         if (connected) return
-        const interval = setInterval(() => {
-            worker.postMessage({
-                type: WorkerMessageType.PHYSICS_READY,
-                paused,
-            })
-        }, 200)
-        return () => {
-            clearInterval(interval)
-        }
+        worker.postMessage({
+            type: WorkerMessageType.PHYSICS_READY,
+            paused,
+        })
     }, [connected, paused])
 
     useEffect(() => {
@@ -176,7 +179,7 @@ const PhysicsConsumer: React.FC<Props> = ({
                     setConnected(true)
                     break;
                 case WorkerMessageType.PHYSICS_UPDATE:
-                    onUpdate(message.updateTime, message.positions, message.angles, message.bodies, message.velocities)
+                    onUpdateRef.current(message.updateTime, message.positions, message.angles, message.bodies, message.velocities)
 
                     worker.postMessage({
                         type: WorkerMessageType.PHYSICS_PROCESSED,
