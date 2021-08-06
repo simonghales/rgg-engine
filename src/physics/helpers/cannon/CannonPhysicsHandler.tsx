@@ -2,7 +2,7 @@ import { World, Body } from "cannon-es"
 import React, {useCallback, useMemo, useRef} from "react"
 import {getNow} from "../../../utils/time";
 import Physics from "../../Physics";
-import WorkerSubscription from "../planckjs/WorkerSubscription";
+import WorkerSubscription from "../rapier3d/WorkerSubscription";
 import {usePhysics} from "../planckjs/PlanckPhysicsHandler";
 import {Context} from "../planckjs/PlanckPhysicsHandler.context";
 import {Context as AppContext} from "../planckjs/PlanckApp.context";

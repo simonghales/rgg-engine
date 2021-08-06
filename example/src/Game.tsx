@@ -1,6 +1,5 @@
 import {Box, Sphere } from "@react-three/drei"
 import React, {useEffect, useRef} from "react"
-import {Object3D} from "three";
 import {
     FixtureShape,
     usePlanckBody,

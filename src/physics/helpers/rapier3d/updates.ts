@@ -3,6 +3,14 @@ import {RigidBody} from "@dimforge/rapier3d-compat/rapier.js";
 import {Object3D} from "three";
 import { AddBodyDef } from "./types";
 
+export type ApplyBufferDataFn = (
+    buffers: Buffers,
+    syncedBodies: {
+        [key: string]: any,
+    },
+    syncedBodiesOrder: string[]
+) => void
+
 export const applyBufferData = (
     buffers: Buffers,
     syncedBodies: {

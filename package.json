@@ -1,5 +1,5 @@
 {
-  "version": "0.4.12",
+  "version": "0.4.13-alpha.2",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -22,11 +22,11 @@
   "peerDependencies": {
     "@dimforge/rapier3d": ">=0.3",
     "@dimforge/rapier3d-compat": ">=0.3",
+    "@react-three/fiber": ">=6.0.5",
     "cannon-es": ">=0.16",
     "planck-js": ">=0.3",
     "react": ">=16",
-    "react-three-fiber": ">=5.0",
-    "three": "^0.124.0",
+    "three": ">=0.127.0",
     "zustand": ">=^3.3.3"
   },
   "husky": {
@@ -56,17 +56,18 @@
   "devDependencies": {
     "@dimforge/rapier3d": "^0.3.1",
     "@dimforge/rapier3d-compat": "^0.3.1",
+    "@react-three/fiber": "^6.0.21",
     "@size-limit/preset-small-lib": "^4.9.2",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
+    "@types/three": "^0.127.0",
     "cannon-es": "^0.16.0",
     "husky": "^5.0.9",
     "planck-js": "^0.3.26",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-three-fiber": "^5.3.18",
     "size-limit": "^4.9.2",
-    "three": "^0.124.0",
+    "three": "^0.127.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^4.1.5",
@@ -74,6 +75,7 @@
   },
   "dependencies": {
     "react-nil": "^0.0.3",
-    "shapes": "^0.4.0"
+    "shapes": "^0.4.0",
+    "valtio": "^1.0.6"
   }
 }

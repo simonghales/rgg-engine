@@ -1,24 +1,26 @@
-import {AddBodyDef, Buffers} from "./types";
+import {AddBodyDef, ExtBuffers} from "./types";
 import {Body} from "planck-js";
-import {getNow} from "../../../utils/time";
+// import {getNow} from "../../../utils/time";
 import {lerp} from "../../../utils/numbers";
 import {Object3D} from "three";
 import {BodyData} from "../../types";
 
 export type ApplyBufferDataFn = (
-    buffers: Buffers,
+    buffers: ExtBuffers,
     syncedBodies: {
         [key: string]: any,
     },
     syncedBodiesOrder: string[]
 ) => void
 
-export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => {
+export const lerpBody = (body: BodyData, object: Object3D, delta: number /* stepRate: number */) => {
+    
+    // const maxLerp: number = 1;
 
     const {
         position,
         angle,
-        lastUpdate,
+        // lastUpdate,
         previous,
         applyRotation = true,
     } = body
@@ -36,30 +38,32 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
         return
     }
 
-    const now = getNow()
+    // const now = getNow()
 
-    const step = stepRate + 2
-    const nextExpectedUpdate = lastUpdate + step
+    // const step = stepRate + 2
+    // const nextExpectedUpdate = lastUpdate + step
 
-    const timeRemaining = nextExpectedUpdate - now
-    let physicsRemainingRatio = timeRemaining / step
+    // const timeRemaining = nextExpectedUpdate - now
+    // let physicsRemainingRatio = timeRemaining / step
 
-    if (physicsRemainingRatio < 0) {
-        physicsRemainingRatio = 0
-    }
+    // if (physicsRemainingRatio < 0) {
+    //     physicsRemainingRatio = 0
+    // }
 
-    physicsRemainingRatio = 1 - physicsRemainingRatio
+    // physicsRemainingRatio = 1 - physicsRemainingRatio
+    // const scalar = 1 / maxLerp
+    // physicsRemainingRatio *= scalar
 
     object.position.x = lerp(
-        previous.position[0],
+        object.position.x,
         position[0],
-        physicsRemainingRatio
+        1 - 0.0000000000000000005 ** delta,
     );
 
     object.position.z = lerp(
-        previous.position[1],
+        object.position.z,
         position[1],
-        physicsRemainingRatio
+        1 - 0.0000000000000000005 ** delta,
     );
 
     if (applyRotation) {
@@ -68,42 +72,51 @@ export const lerpBody = (body: BodyData, object: Object3D, stepRate: number) => 
 }
 
 const getPositionAndAngle = (
-    buffers: Buffers,
+    buffers: ExtBuffers,
     index: number
 ): {
     position: [number, number];
     angle: number;
+    velocity: [number, number];
 } | null => {
     if (index !== undefined && buffers.positions.length && buffers.angles.length) {
         const start = index * 2;
         const position = (buffers.positions.slice(start, start + 2) as unknown) as [
             number,
-            number
+            number,
+        ];
+        const velocityStart = index * 2;
+        const velocity = (buffers.velocities.slice(velocityStart, velocityStart + 2) as unknown) as [
+            number,
+            number,
         ];
         return {
             position,
             angle: buffers.angles[index],
+            velocity,
         };
     } else {
         return null;
     }
 };
 
-export const updateBodyData = (bodyData: BodyData, positions: Float32Array, angles: Float32Array) => {
+export const updateBodyData = (bodyData: BodyData, positions: Float32Array, angles: Float32Array, velocities: Float32Array ) => {
     bodyData.previous.position = bodyData.position
     bodyData.previous.angle = bodyData.angle
     const update = getPositionAndAngle({
         positions,
         angles,
+        velocities,
     }, bodyData.index)
     if (update) {
         bodyData.position = update.position
         bodyData.angle = update.angle
+        bodyData.velocity = update.velocity
     }
 }
 
 export const applyBufferData = (
-    buffers: Buffers,
+    buffers: ExtBuffers,
     syncedBodies: {
         [key: string]: Body,
     }, syncedBodiesOrder: string[]) => {
@@ -111,6 +124,7 @@ export const applyBufferData = (
     const {
         positions,
         angles,
+        velocities,
     } = buffers
 
     syncedBodiesOrder.forEach((id, index) => {
@@ -118,9 +132,12 @@ export const applyBufferData = (
         if (!body) return;
         const position = body.getPosition();
         const angle = body.getAngle();
+        const velocity = body.getLinearVelocity();
         positions[2 * index + 0] = position.x;
         positions[2 * index + 1] = position.y;
         angles[index] = angle;
+        velocities[2 * index] = velocity.x;
+        velocities[2 * index + 1] = velocity.y;
     })
 
 }

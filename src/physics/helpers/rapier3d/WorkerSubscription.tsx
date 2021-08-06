@@ -1,15 +1,15 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import {usePlanckPhysicsHandlerContext} from "./PlanckPhysicsHandler.context";
+import {usePlanckPhysicsHandlerContext} from "../planckjs/PlanckPhysicsHandler.context";
 import {getNow} from "../../../utils/time";
 import {WorkerMessageData, WorkerMessageType} from "../../types";
 import {ApplyBufferDataFn} from "./updates";
-import {ExtBuffers} from "./types";
+import {Buffers} from "../planckjs/types";
 
 const WorkerSubscription: React.FC<{
     worker: Worker,
     subscribe: (callback: () => void) => () => void,
     applyBufferData: ApplyBufferDataFn,
-    generateBuffers: (maxNumberOfSyncedBodies: number) => ExtBuffers,
+    generateBuffers: (maxNumberOfSyncedBodies: number) => Buffers,
     setPaused?: (paused: boolean) => void,
 }> = ({worker, subscribe, applyBufferData, generateBuffers, setPaused}) => {
 
@@ -40,7 +40,6 @@ const WorkerSubscription: React.FC<{
         const {
             positions,
             angles,
-            velocities,
         } = buffers
 
         const message: any = {
@@ -48,7 +47,6 @@ const WorkerSubscription: React.FC<{
             updateTime: getNow(),
             positions: positions,
             angles: angles,
-            velocities: velocities,
         }
 
         if (shouldSyncBodies) {
@@ -56,7 +54,7 @@ const WorkerSubscription: React.FC<{
             localStateRef.current.bodiesIteration = bodiesIteration
         }
 
-        worker.postMessage(message, [positions.buffer, angles.buffer, velocities.buffer])
+        worker.postMessage(message, [positions.buffer, angles.buffer])
 
         // process local fixed updates
 
@@ -101,7 +99,6 @@ const WorkerSubscription: React.FC<{
                 case WorkerMessageType.PHYSICS_PROCESSED:
                     buffers.positions = message.positions
                     buffers.angles = message.angles
-                    buffers.velocities = message.velocities
                     setBuffersAvailable(true)
                     break;
                 case WorkerMessageType.PHYSICS_SET_PAUSED:

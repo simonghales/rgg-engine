@@ -1,5 +1,5 @@
 import React, {useEffect} from "react"
-import {useFrame} from "react-three-fiber";
+import {useFrame} from "@react-three/fiber";
 import {usePhysicsConsumerContext} from "./PhysicsConsumer.context";
 
 const RAFSync: React.FC = () => {
@@ -16,7 +16,7 @@ const IntervalSync: React.FC = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            syncMeshes()
+            syncMeshes(null, 1000 / 30)
         }, 1000 / 30)
         return () => {
             clearInterval(interval)

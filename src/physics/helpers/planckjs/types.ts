@@ -5,6 +5,12 @@ export type Buffers = {
     angles: Float32Array;
 };
 
+export type ExtBuffers = {
+    positions: Float32Array;
+    angles: Float32Array;
+    velocities: Float32Array;
+};
+
 export enum FixtureShape {
     Circle = 'Circle',
     Box = 'Box',

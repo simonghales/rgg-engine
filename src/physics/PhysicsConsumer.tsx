@@ -11,7 +11,7 @@ import React, {
 import {BodyData, WorkerMessageData, WorkerMessageType} from "./types";
 import {getNow} from "../utils/time";
 import {Object3D} from "three";
-import {DEFAULT_STEP_RATE} from "./config";
+// import {DEFAULT_STEP_RATE} from "./config";
 import {Context} from "./PhysicsConsumer.context";
 import {PhysicsConsumerSyncMeshes} from "../index";
 import {WorkerMessaging} from "../generic";
@@ -76,17 +76,18 @@ export const OnFixedUpdateProvider: React.FC = ({children}) => {
 }
 
 type Props = DefaultPhysicsConsumerProps & {
-    lerpBody: (body: BodyData, object: Object3D, stepRate: number) => void,
-    updateBodyData: (bodyData: BodyData, positions: Float32Array, angles: Float32Array) => void,
+    lerpBody: (body: BodyData, object: Object3D, delta: number) => void,
+    updateBodyData: (bodyData: BodyData, positions: Float32Array, angles: Float32Array, velocities: Float32Array) => void,
 }
 
 const PhysicsConsumer: React.FC<Props> = ({
-            paused = false,
-          updateBodyData,
-          worker,
-          children,
-          stepRate = DEFAULT_STEP_RATE, lerpBody
-      }) => {
+        paused = false,
+        updateBodyData,
+        worker,
+        children,
+        // stepRate = DEFAULT_STEP_RATE,
+        lerpBody
+    }) => {
 
     const [connected, setConnected] = useState(false)
     const [bodiesData] = useState<{
@@ -107,16 +108,18 @@ const PhysicsConsumer: React.FC<Props> = ({
     } = useFixedUpdateContext()
 
     const onFrameCallbacks = useRef<{
-        [id: string]: () => void,
+        [id: string]: (delta: number) => void,
     }>({})
 
-    const lerpMesh = useCallback((body: BodyData, ref: MutableRefObject<Object3D>) => {
+    const lerpMesh = useCallback((body: BodyData, ref: MutableRefObject<Object3D>, delta: number) => {
         if (!ref.current) return
         const object = ref.current
-        lerpBody(body, object, stepRate)
+        lerpBody(body, object, delta)
     }, [])
 
-    const onUpdate = useCallback((_updateTime: number, positions: Float32Array, angles: Float32Array, bodies: undefined | string[]) => {
+    const onUpdate = useCallback((_updateTime: number, positions: Float32Array, angles: Float32Array, bodies: undefined | string[], velocities: Float32Array) => {
+
+        if (!updateSubscriptions) return;
 
         const now = getNow()
 
@@ -129,7 +132,7 @@ const PhysicsConsumer: React.FC<Props> = ({
                 bodyData.index = bodies.indexOf(id)
             }
             if (bodyData.index >= 0) {
-                updateBodyData(bodyData, positions, angles)
+                updateBodyData(bodyData, positions, angles, velocities);
                 bodyData.lastUpdate = now
                 // console.log('lastUpdate', updateTime, getNow())
             }
@@ -142,17 +145,18 @@ const PhysicsConsumer: React.FC<Props> = ({
 
     }, [updateSubscriptions])
 
+    const onUpdateRef = useRef(onUpdate);
+
+    useEffect(() => {
+        onUpdateRef.current = onUpdate;
+    }, [onUpdate]);
+
     useEffect(() => {
         if (connected) return
-        const interval = setInterval(() => {
-            worker.postMessage({
-                type: WorkerMessageType.PHYSICS_READY,
-                paused,
-            })
-        }, 200)
-        return () => {
-            clearInterval(interval)
-        }
+        worker.postMessage({
+            type: WorkerMessageType.PHYSICS_READY,
+            paused,
+        })
     }, [connected, paused])
 
     useEffect(() => {
@@ -175,13 +179,15 @@ const PhysicsConsumer: React.FC<Props> = ({
                     setConnected(true)
                     break;
                 case WorkerMessageType.PHYSICS_UPDATE:
-                    onUpdate(message.updateTime, message.positions, message.angles, message.bodies)
+                    onUpdateRef.current(message.updateTime, message.positions, message.angles, message.bodies, message.velocities)
 
                     worker.postMessage({
                         type: WorkerMessageType.PHYSICS_PROCESSED,
                         positions: message.positions,
                         angles: message.angles,
-                    }, [message.positions.buffer, message.angles.buffer])
+                        velocities: message.velocities,
+                        
+                    }, [message.positions.buffer, message.angles.buffer, message.velocities.buffer])
                     break;
             }
 
@@ -207,7 +213,7 @@ const PhysicsConsumer: React.FC<Props> = ({
                 applyRotation,
             }
             bodiesData[id] = body
-            onFrameCallbacks.current[id] = () => lerpMesh(body, ref)
+            onFrameCallbacks.current[id] = (delta: number) => lerpMesh(body, ref, delta)
             return () => {
                 delete onFrameCallbacks.current[id]
                 delete bodiesData[id]
@@ -215,8 +221,8 @@ const PhysicsConsumer: React.FC<Props> = ({
         }
     }), [])
 
-    const syncMeshes = useCallback(() => {
-        Object.values(onFrameCallbacks.current).forEach(callback => callback())
+    const syncMeshes = useCallback((_, delta: number) => {
+        Object.values(onFrameCallbacks.current).forEach(callback => callback(delta))
     }, [])
 
     const sendMessage = useCallback((message: any) => {
@@ -233,6 +239,7 @@ const PhysicsConsumer: React.FC<Props> = ({
                 syncBody,
                 syncMeshes,
                 sendMessage,
+                bodiesData,
             }}>
                 <PhysicsConsumerSyncMeshes useRAF/>
                 {children}
